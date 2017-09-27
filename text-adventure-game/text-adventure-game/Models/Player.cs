@@ -85,6 +85,7 @@ namespace text_adventure_game.Models
                 answer = Console.ReadLine();
             } while (answer.ToLower() != "yes");
         }
+
         public void MaleBaseStats()
         {
             Health = 100;

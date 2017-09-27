@@ -8,7 +8,7 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        Player player = new Player();
+        public Player player = new Player();
         public void StartProgram()
         {
             int userInput;
@@ -27,6 +27,7 @@ namespace text_adventure_game.Models
                             player.AskGender();
                             player.AskClass();
                             player.AskName();
+                            Menu();
                             break;
                         case 2:
                             //Exit Game
@@ -34,6 +35,15 @@ namespace text_adventure_game.Models
                     }
                 }
             } while (userInput <= 0 || userInput > 2); 
+        }
+
+        public void Menu()
+        {
+            Console.Clear();
+            Console.WriteLine($"|HP {player.Health}               Mana: {player.Mana}");
+            Console.WriteLine($"|Strengh: {player.Strenght}     Knowledge: {player.Knowledge}");
+            Console.WriteLine($"|Damage: {player.Damage}");
+
         }
     }
 }
