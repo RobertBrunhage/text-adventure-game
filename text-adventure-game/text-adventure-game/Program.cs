@@ -10,7 +10,7 @@ namespace text_adventure_game
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello to the new text based adventure game!");
+            Console.WriteLine("Hello world");
         }
     }
 }
