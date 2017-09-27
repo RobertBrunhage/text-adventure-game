@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using text_adventure_game.Models;
 
 namespace text_adventure_game
 {
@@ -10,7 +11,8 @@ namespace text_adventure_game
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello to the new text based adventure game!");
+            MainMenu mainMenu = new MainMenu();
+            mainMenu.StartProgram();
         }
     }
 }
