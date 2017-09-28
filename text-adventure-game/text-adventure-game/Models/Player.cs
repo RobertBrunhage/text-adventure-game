@@ -9,7 +9,29 @@ namespace text_adventure_game.Models
     class Player
     {
         //Main things
-        public int Health { get; set; }
+        private int _Health;
+        public int Health
+        {
+            get
+            {
+                return _Health;
+            }
+            set
+            {
+                if(_Health < 0)
+                {
+                    _Health = 0;
+                }
+                else if(_Health > 200)
+                {
+                    _Health = 200;
+                }
+                else
+                {
+                    _Health = value;
+                }
+            }
+        }
         public int Damage { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
