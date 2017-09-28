@@ -10,16 +10,12 @@ namespace text_adventure_game.Models
     {
         //Main things
         public int Health { get; set; }
-        public int Mana { get; set; }
         public int Damage { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
 
         //Player Stats
-        public int Strenght { get; set; }
-        public int Knowledge { get; set; }
-        public int SwordDamage { get; set; }
-        public int BowDamage { get; set; }
+        public int Armour { get; set; }
 
         public void AskGender()
         {
@@ -53,21 +49,20 @@ namespace text_adventure_game.Models
                 Console.Clear();
                 Console.WriteLine("What class would you like to play?\n");
                 Console.WriteLine("1. Warrior");
-                Console.WriteLine("2. Archer");
+                Console.WriteLine("2. Mage");
 
                 if (int.TryParse(Console.ReadLine(), out userInput))
                 {
                     switch (userInput)
                     {
                         case 1:
-                            SwordDamage = 1;
-                            Damage += SwordDamage;
                             Class = "Warrior";
+                            Damage += 1;
+                            Armour += 10;
                             break;
                         case 2:
-                            BowDamage = 1;
-                            Damage += SwordDamage;
-                            Class = "Archer";
+                            Class = "Mage";
+                            Damage += 2;
                             break;
                     }
                 }
@@ -89,18 +84,14 @@ namespace text_adventure_game.Models
         public void MaleBaseStats()
         {
             Health = 100;
-            Mana = 100;
             Damage = 1;
-
-            Strenght = 1;
+            Armour = 0;
         }
         public void FemaleBaseStats()
         {
             Health = 100;
-            Mana = 100;
             Damage = 1;
-
-            Knowledge = 1;
+            Armour = 0;
         }
     }
 }
