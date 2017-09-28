@@ -10,7 +10,7 @@ namespace text_adventure_game.Models
     class MainMenu
     {
         public Player player = new Player();
-
+        public Monster monster = new Monster();
         private string _mapName1 = "Map 1";
         private string _mapName2 = "Map 2";
         private string _mapName3 = "Map 3";
@@ -44,7 +44,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userInput <= 0 || userInput > 2);
+            } while (userInput < 1 || userInput > 2);
 
         } // Player Creation
 
@@ -62,7 +62,7 @@ namespace text_adventure_game.Models
             Console.ReadKey();
 
             Console.Clear();
-            Console.WriteLine("\nThe game menu will look like this below, but also show your stats\n");
+            Console.WriteLine("The game menu will look like this below, but also show your stats\n");
             Console.WriteLine("1. Adventure");
             Console.WriteLine("2. Inventory");
             Console.WriteLine("3. Store");
@@ -196,6 +196,11 @@ namespace text_adventure_game.Models
             {
                 Console.WriteLine("You are at a rock...");
                 Console.ReadKey();
+                monster.MonsterDif = 1;
+                monster.ChooseMonster();
+
+                
+                
             }
 
             void Poop()
