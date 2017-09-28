@@ -29,7 +29,7 @@ namespace text_adventure_game.Models
                             player.AskClass();
                             player.AskName();
                             Console.Clear();
-                            Menu();
+                            GameStart();
                             break;
                         case 2:
                             //Exit Game
@@ -37,9 +37,9 @@ namespace text_adventure_game.Models
                     }
                 }
             } while (userInput <= 0 || userInput > 2); 
-        }
+        } // Player Creation
 
-        public void Menu()
+        public void GameStart() // Will host most of the game
         {
             //Console.WriteLine($"|HP {player.Health}               Name: {player.Name}");
             //Console.WriteLine($"|Damage: {player.Damage}          Armour: {player.Armour}");
@@ -58,7 +58,7 @@ namespace text_adventure_game.Models
             Console.WriteLine("\nThe game menu will look like this:\n"); 
             Console.WriteLine("1. Adventure");
             Console.WriteLine("2. Inventory");
-            Console.WriteLine("3. Store"); // In the future we can make it so that this one disapears until we have done the first adventure
+            Console.WriteLine("3. Store");
             Console.WriteLine("4. Tavern");
             Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure!");
             Console.ReadKey();
@@ -67,10 +67,7 @@ namespace text_adventure_game.Models
             int userChoice = 0;
             do
             {
-                Console.Clear();
-                Console.WriteLine($"|HP {player.Health}               Name: {player.Name}");
-                Console.WriteLine($"|Damage: {player.Damage}          Armour: {player.Armour}");
-                Console.WriteLine("|_________________________________________________________");
+                player.PrintStats();
 
                 Console.WriteLine("1. Adventure");
                 Console.WriteLine("2. Inventory");
@@ -82,15 +79,19 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
+                            player.PrintStats();
                             //AdventureStart();
                             break;
                         case 2:
+                            player.PrintStats();
                             //Open Inventory
                             break;
                         case 3:
+                            player.PrintStats();
                             //Open Store
                             break;
                         case 4:
+                            player.PrintStats();
                             //Enter Tavern
                             break;
                         default:
@@ -103,5 +104,6 @@ namespace text_adventure_game.Models
             } while (userChoice < 1 || userChoice > 4);
             Console.Clear();
         }
+
     }
 }

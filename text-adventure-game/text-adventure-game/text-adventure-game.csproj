@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Models\MainMenu.cs" />
     <Compile Include="Models\Player.cs" />
-    <Compile Include="Models\Warrior.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

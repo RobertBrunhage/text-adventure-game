@@ -13,6 +13,7 @@ namespace text_adventure_game.Models
         public int Damage { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
+        public int Gold { get; set; }
 
         //Player Stats
         public int Armour { get; set; }
@@ -32,10 +33,16 @@ namespace text_adventure_game.Models
                     switch (userInput)
                     {
                         case 1:
-                            MaleBaseStats();
+                            Health = 100;
+                            Damage = 1;
+                            Armour = 0;
+                            Gold = 0;
                             break;
                         case 2:
-                            FemaleBaseStats();
+                            Health = 100;
+                            Damage = 1;
+                            Armour = 0;
+                            Gold = 0;
                             break;
                     }
                 }
@@ -80,18 +87,13 @@ namespace text_adventure_game.Models
                 answer = Console.ReadLine();
             } while (answer.ToLower() != "yes");
         }
-
-        public void MaleBaseStats()
+        public void PrintStats()
         {
-            Health = 100;
-            Damage = 1;
-            Armour = 0;
-        }
-        public void FemaleBaseStats()
-        {
-            Health = 100;
-            Damage = 1;
-            Armour = 0;
+            Console.Clear();
+            Console.WriteLine($"|HP {Health}               Name: {Name}");
+            Console.WriteLine($"|Damage: {Damage}          Armour: {Armour}");
+            Console.WriteLine($"|Gold: {Gold}");
+            Console.WriteLine("|_________________________________________________________");
         }
     }
 }
