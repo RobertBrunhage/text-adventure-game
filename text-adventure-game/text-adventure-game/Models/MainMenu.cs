@@ -165,6 +165,9 @@ namespace text_adventure_game.Models
 
         public void Map1()
         {
+            monster.MonsterDif = 1;
+            monster.ChooseMonster();
+
             string text;
             int userChoice;
             Console.Clear();
@@ -182,19 +185,16 @@ namespace text_adventure_game.Models
                         case 1:
                             Console.WriteLine("You are at a bush...");
                             Console.ReadKey();
-                            monster.MonsterDif = 1;
-                            monster.ChooseMonster();
                             Console.WriteLine($"A {monster.Name} has appeared...");
                             Console.ReadKey();
                             Console.Clear();
 
-                            CombatMonster1(); //If we lose the battle or press run we return to StartGame();
+                            CombatMonster(); //If we lose the battle or press run we return to StartGame();
                             //Tell a story then return to GameStart();
                             GameStart();
                             break;
                         case 2:
-                            monster.MonsterDif = 1;
-                            monster.ChooseMonster();
+
                             do
                             {
                                 Console.Clear();
@@ -206,7 +206,7 @@ namespace text_adventure_game.Models
                                 {
                                     if (userChoice == 1)
                                     {
-                                        CombatMonster1();
+                                        CombatMonster();
                                         text = "A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...";
                                         foreach (char c in text)
                                         {
@@ -243,77 +243,80 @@ namespace text_adventure_game.Models
                 }
             } while ((userChoice < 1 || userChoice > 2));
 
-            void CombatMonster1()
+            
+        }
+
+        void CombatMonster()
+        {
+            int userChoice;
+            Random rndPlayerDamage = new Random();
+
+            Random rndMonsterDamage = new Random();
+            Random rndMonsterGold = new Random();
+
+            do
             {
-                Random rndPlayerDamage = new Random();
-
-                Random rndMonsterDamage = new Random();
-                Random rndMonsterGold = new Random();
-
-                do
-                {
-                    Console.Clear();
-                    player.PrintStats();
-                    monster.PrintMonsterStats();
-                    if (player.Class.ToLower() == "mage")
-                    {
-                        Console.WriteLine("\n1. Fire ball");
-                        Console.WriteLine("2. run");
-                    }
-                    else if (player.Class.ToLower() == "warrior")
-                    {
-                        Console.WriteLine("\n1. Quick Attack");
-                        Console.WriteLine("2. run");
-                    }
-                    
-                    if (int.TryParse(Console.ReadLine(), out userChoice))
-                    {
-                        switch (userChoice)
-                        {
-                            case 1:
-                                int playerDamage = rndPlayerDamage.Next(1, player.Damage + 1);
-                                int monsterDamage = rndMonsterDamage.Next(1, monster.Damage + 1);
-
-                                monster.Health -= playerDamage;
-                                Console.WriteLine($"\nYou did {playerDamage} damage on the monster");
-                                player.Health -= monsterDamage;
-                                Console.WriteLine($"The monster did {monsterDamage} damage on you");
-                                Console.ReadKey();
-                                break;
-                            case 2:
-                                //break out of the switch
-                                break;
-                            default:
-                                break;
-                        }   
-                    }
-                    if (userChoice == 2)
-                    {
-                        break; // Break out of the do while loop
-                    }
-                } while (monster.Health > 0 && player.Health > 0);
                 Console.Clear();
-                if (monster.Health <= 0)
+                player.PrintStats();
+                monster.PrintMonsterStats();
+                if (player.Class.ToLower() == "mage")
                 {
-                    int monsterGold = rndMonsterGold.Next(3, monster.GoldValue + 1);
-                    Console.WriteLine("Monster has been defeated!");
-                    Console.WriteLine($"You have been awarded {monsterGold} gold");
-                    player.Gold += monsterGold;
-                    Console.ReadKey();
-                    Console.Clear();
+                    Console.WriteLine("\n1. Fire ball");
+                    Console.WriteLine("2. run");
                 }
-                else if (player.Health <= 0)
+                else if (player.Class.ToLower() == "warrior")
                 {
-                    Console.WriteLine("You have died");
-                    Console.ReadKey();
-                    GameStart();
+                    Console.WriteLine("\n1. Quick Attack");
+                    Console.WriteLine("2. run");
                 }
-                else if(userChoice == 2)
+
+                if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
-                    Console.WriteLine("You will now be returned to the menu");
-                    Console.ReadKey();
-                    GameStart();
+                    switch (userChoice)
+                    {
+                        case 1:
+                            int playerDamage = rndPlayerDamage.Next(1, player.Damage + 1);
+                            int monsterDamage = rndMonsterDamage.Next(1, monster.Damage + 1);
+
+                            monster.Health -= playerDamage;
+                            Console.WriteLine($"\nYou did {playerDamage} damage on the monster");
+                            player.Health -= monsterDamage;
+                            Console.WriteLine($"The monster did {monsterDamage} damage on you");
+                            Console.ReadKey();
+                            break;
+                        case 2:
+                            //break out of the switch
+                            break;
+                        default:
+                            break;
+                    }
                 }
+                if (userChoice == 2)
+                {
+                    break; // Break out of the do while loop
+                }
+            } while (monster.Health > 0 && player.Health > 0);
+            Console.Clear();
+            if (monster.Health <= 0)
+            {
+                int monsterGold = rndMonsterGold.Next(3, monster.GoldValue + 1);
+                Console.WriteLine("Monster has been defeated!");
+                Console.WriteLine($"You have been awarded {monsterGold} gold");
+                player.Gold += monsterGold;
+                Console.ReadKey();
+                Console.Clear();
+            }
+            else if (player.Health <= 0)
+            {
+                Console.WriteLine("You have died");
+                Console.ReadKey();
+                GameStart();
+            }
+            else if (userChoice == 2)
+            {
+                Console.WriteLine("You will now be returned to the menu");
+                Console.ReadKey();
+                GameStart();
             }
         }
     }

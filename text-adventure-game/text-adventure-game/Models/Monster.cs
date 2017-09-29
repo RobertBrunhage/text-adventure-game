@@ -36,6 +36,10 @@ namespace text_adventure_game.Models
                     Name = "Snake";
                     break;
                 case Monsters.Monster2:
+                    Health = 30;
+                    GoldValue = 15;
+                    Damage = 8;
+                    Name = "bajs";
                     break;
                 case Monsters.Monster3:
                     break;
