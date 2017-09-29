@@ -16,6 +16,7 @@ namespace text_adventure_game.Models
         private string _mapName3 = "Map 3";
         private string _mapName4 = "Map 4";
         private string _mapName5 = "Map 5";
+        private bool gameOn = true;
 
         public void StartProgram()
         {
@@ -84,6 +85,7 @@ namespace text_adventure_game.Models
                 Console.WriteLine("2. Inventory");
                 Console.WriteLine("3. Store");
                 Console.WriteLine("4. Tavern");
+                Console.WriteLine("5. Exit Game");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -105,6 +107,9 @@ namespace text_adventure_game.Models
                             player.PrintStats();
                             //Enter Tavern
                             break;
+                        case 5:
+                            gameOn = false;
+                            break;
                         default:
                             Console.Clear();
                             Console.WriteLine($"{player.Name}, to the left of each word you can see a number. Enter the number for where you want to go.");
@@ -112,7 +117,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 4);
+            } while (userChoice < 1 || userChoice > 5 || gameOn == true);
             Console.Clear();
         }
 
@@ -150,7 +155,7 @@ namespace text_adventure_game.Models
                             //Boss Map
                             break;
                         case 6:
-                            GameStart();
+                            // Returning to menu
                             break;
                         default:
                             Console.Clear();
@@ -191,10 +196,9 @@ namespace text_adventure_game.Models
 
                             CombatMonster(); //If we lose the battle or press run we return to StartGame();
                             //Tell a story then return to GameStart();
-                            GameStart();
+                            // Returning to menu
                             break;
                         case 2:
-
                             do
                             {
                                 Console.Clear();
@@ -233,7 +237,7 @@ namespace text_adventure_game.Models
                                     }
                                     else if (userChoice == 2)
                                     {
-                                        GameStart();
+                                        // Returning to menu
                                     }
                                     break;
                                 }
@@ -242,8 +246,6 @@ namespace text_adventure_game.Models
                     }
                 }
             } while ((userChoice < 1 || userChoice > 2));
-
-            
         }
 
         void CombatMonster()
@@ -310,13 +312,13 @@ namespace text_adventure_game.Models
             {
                 Console.WriteLine("You have died");
                 Console.ReadKey();
-                GameStart();
+                // Returning to menu
             }
             else if (userChoice == 2)
             {
                 Console.WriteLine("You will now be returned to the menu");
                 Console.ReadKey();
-                GameStart();
+                // Returning to menu
             }
         }
     }
