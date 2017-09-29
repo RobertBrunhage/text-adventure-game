@@ -31,8 +31,8 @@ namespace text_adventure_game.Models
             {
                 case Monsters.Monster1:
                     Health = 20;
-                    GoldValue = 3;
-                    Damage = 2;
+                    GoldValue = 10;
+                    Damage = 4;
                     Name = "bajs";
                     break;
                 case Monsters.Monster2:
@@ -46,6 +46,12 @@ namespace text_adventure_game.Models
                 default:
                     break;
             }
+        }
+
+        public void PrintMonsterStats()
+        {
+            Console.WriteLine($"monster name: {Name}");
+            Console.WriteLine($"monster health: {Health}");
         }
     }
 }
