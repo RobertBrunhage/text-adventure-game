@@ -11,7 +11,7 @@ namespace text_adventure_game.Models
     {
         public Player player = new Player();
         public Monster monster = new Monster();
-        private string _mapName1 = "Map 1";
+        private string _mapName1 = "The glimting forest";
         private string _mapName2 = "Map 2";
         private string _mapName3 = "Map 3";
         private string _mapName4 = "Map 4";
@@ -35,6 +35,7 @@ namespace text_adventure_game.Models
                             player.AskGender();
                             player.AskClass();
                             player.AskName();
+                            //player.AskAge();
                             Console.Clear();
                             Introduction();
                             GameStart();
@@ -51,8 +52,8 @@ namespace text_adventure_game.Models
         public void Introduction()
         {
             //Introduction
-            string text = ($"Welcome to the world of Adventure's and Pixel's. In this world there is all kinds of magical and explorious adventures. " +
-                $"You as a {player.Class} will now be guided by the creator (me....IT's A ME....MARIO) all jokes aside let us begin your adventure, {player.Name} \n");
+            string text = ($"Welcome to the world of Adventure of Pixel's. In this world there is all kinds of magical and explorious adventures. " +
+                $"You as a {player.Class} will now be guided by the creator (me....IT's A ME....MARIO) all jokes aside let us begin your adventure, {player.Name}. \n");
             foreach (char c in text)
             {
                 Console.Write(c);
@@ -67,7 +68,7 @@ namespace text_adventure_game.Models
             Console.WriteLine("2. Inventory");
             Console.WriteLine("3. Store");
             Console.WriteLine("4. Tavern\n");
-            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure! Press any key to continue");
+            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure! Press any key so you can go to the town!");
             Console.ReadKey();
         }
 
@@ -164,16 +165,14 @@ namespace text_adventure_game.Models
 
         public void Map1()
         {
+            string text;
             int userChoice;
-
             Console.Clear();
             player.PrintStats();
-            Console.WriteLine($"You have entered the portal to: {_mapName1}... It's a vast world with rocks n shit. You see a glimt at a rock but you also see shit at poop\n");
-            Console.WriteLine($"Would you like to go to the rock, or to the poop\n");
-            //Console.SetCursorPosition(20, 0);
-            Console.WriteLine("1. To the rock");
-            //Console.SetCursorPosition(20, 2);
-            Console.WriteLine("2. To the poop");
+            Console.WriteLine($"You have entered the portal to: {_mapName1}... It's a vast world, you can see the wind blowing through the trees... But what is that! Something sparkled in the bushes.. And you can hear a sound coming from the left...\n");
+            Console.WriteLine($"Would you like to go to the bushes, or go to the left\n");
+            Console.WriteLine("1. To the bushes");
+            Console.WriteLine("2. To the left");
             do
             {
                 if(int.TryParse(Console.ReadLine(), out userChoice))
@@ -181,38 +180,68 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
-                            rock();
+                            Console.WriteLine("You are at a bush...");
+                            Console.ReadKey();
+                            monster.MonsterDif = 1;
+                            monster.ChooseMonster();
+                            Console.WriteLine($"A {monster.Name} has appeared...");
+                            Console.ReadKey();
+                            Console.Clear();
+
+                            CombatMonster1(); //If we lose the battle or press run we return to StartGame();
+                            //Tell a story then return to GameStart();
+                            GameStart();
                             break;
                         case 2:
-                            Poop();
-                            break;
-                        default:
+                            monster.MonsterDif = 1;
+                            monster.ChooseMonster();
+                            do
+                            {
+                                Console.Clear();
+                                player.PrintStats();
+                                Console.WriteLine($"You walk slowly to the left, trying to hide as much as possible but you see a {monster.Name}... do you wish to attack or run back to the town?");
+                                Console.WriteLine($"1. Attack the snake");
+                                Console.WriteLine($"2. Run back to town");
+                                if (int.TryParse(Console.ReadLine(), out userChoice))
+                                {
+                                    if (userChoice == 1)
+                                    {
+                                        CombatMonster1();
+                                        text = "A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...";
+                                        foreach (char c in text)
+                                        {
+                                            Console.Write(c);
+                                            Thread.Sleep(30);
+                                        }
+                                        
+                                        Console.ReadKey();
+                                        Console.Clear();
+                                        player.PrintStats();
+
+                                        Console.WriteLine("1. Adventure");
+                                        Console.WriteLine("2. Inventory");
+                                        Console.WriteLine("3. Store");
+                                        Console.WriteLine("4. Tavern");
+                                        text = "\nWhat was that...?";
+                                        foreach (char c in text)
+                                        {
+                                            Console.Write(c);
+                                            Thread.Sleep(30);
+                                        }
+                                        Console.ReadKey();
+                                        GameStart();
+                                    }
+                                    else if (userChoice == 2)
+                                    {
+                                        GameStart();
+                                    }
+                                    break;
+                                }
+                            } while (userChoice < 1 || userChoice > 2);
                             break;
                     }
                 }
             } while ((userChoice < 1 || userChoice > 2));
-
-            void rock()
-            {
-                Console.WriteLine("You are at a rock...");
-                Console.ReadKey();
-                monster.MonsterDif = 1;
-                monster.ChooseMonster();
-                Console.WriteLine("A monster has appeared...");
-                Console.ReadKey();
-                Console.Clear();
-
-                CombatMonster1();
-
-                Console.WriteLine("lol");
-                Console.ReadKey();
-            }
-
-            void Poop()
-            {
-                Console.WriteLine("You are at a poop...");
-                Console.ReadKey();
-            }
 
             void CombatMonster1()
             {
@@ -272,7 +301,6 @@ namespace text_adventure_game.Models
                     player.Gold += monsterGold;
                     Console.ReadKey();
                     Console.Clear();
-                    player.PrintStats();
                 }
                 else if (player.Health <= 0)
                 {

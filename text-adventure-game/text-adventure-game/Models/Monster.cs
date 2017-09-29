@@ -33,7 +33,7 @@ namespace text_adventure_game.Models
                     Health = 20;
                     GoldValue = 10;
                     Damage = 4;
-                    Name = "bajs";
+                    Name = "Snake";
                     break;
                 case Monsters.Monster2:
                     break;
