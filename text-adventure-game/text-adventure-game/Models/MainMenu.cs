@@ -474,6 +474,8 @@ namespace text_adventure_game.Models
     }
 }
 //Equip items to the get stats to character
+//-Sort the Inventory by the Inventory ID
+//-choose item to be moved to EquipInventory
 //-EquipInventory List
 //-This list can only hold 1 of each classType
 //-Loop through all types in the EquipInventory list and add all the stats to player
