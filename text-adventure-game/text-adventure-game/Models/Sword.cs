@@ -14,6 +14,7 @@ namespace text_adventure_game.Models
             base.GoldValue = goldValue;
             base.DamageBoost = damageBoost;
             base.StoreID = storeID;
+            base.SlotID = 1;
         }
     }
 }

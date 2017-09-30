@@ -10,16 +10,20 @@ namespace text_adventure_game.Models
     class MainMenu
     {
         public int userChoice = 0;
+        public int weaponID;
         public Player player = new Player();
         public Monster monster = new Monster();
         public Weapons weapons = new Weapons();
 
         public List<Weapons> Store { get; set; }
         public List<Weapons> Inventory { get; set; }
+        public List<Weapons> EquipInventory { get; set; }
 
         public MainMenu()
         {
             Inventory = new List<Weapons>();
+
+            EquipInventory = new List<Weapons>();
 
             Store = new List<Weapons>()
             {
@@ -103,8 +107,9 @@ namespace text_adventure_game.Models
                 Console.WriteLine("2. Inventory");
                 Console.WriteLine("3. Store");
                 Console.WriteLine("4. Inventory");
-                Console.WriteLine("5. Tavern");
-                Console.WriteLine("6. Exit Game");
+                Console.WriteLine("5. Equipped Items");
+                Console.WriteLine("6. Tavern");
+                Console.WriteLine("7. Exit Game");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -113,6 +118,7 @@ namespace text_adventure_game.Models
                         case 1:
                             player.PrintStats();
                             AskAdventure();
+
                             break;
                         case 2:
                             player.PrintStats();
@@ -124,12 +130,17 @@ namespace text_adventure_game.Models
                         case 4:
                             player.PrintStats();
                             PrintInventory();
-                            Console.ReadKey();
                             break;
                         case 5:
-                            //Enter Tavern
+                            player.PrintStats();
+                            PrintEquippedInventory();
+                            //Show Equipped Items
                             break;
                         case 6:
+                            //Enter Tavern
+
+                            break;
+                        case 7:
                             gameOn = false;
                             break;
                         default:
@@ -139,7 +150,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 5 || gameOn == true);
+            } while (userChoice < 1 || userChoice > 6 || gameOn == true);
             Console.Clear();
         }
 
@@ -185,7 +196,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 4);
+            } while (userChoice < 1 || userChoice > 6);
             Console.Clear();
         }
 
@@ -347,7 +358,7 @@ namespace text_adventure_game.Models
 
         public void ItemStore()
         {
-
+            player.Gold = 1000;
             //WeaponType weaponType;
 
             Console.WriteLine("1. Swords");
@@ -375,7 +386,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 2);
+            } while (userChoice < 1 && userChoice > 2);
         }
 
         public void PrintSwords()
@@ -386,7 +397,6 @@ namespace text_adventure_game.Models
                 Console.WriteLine($"Price: {weapon.GoldValue} gold");
                 Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
             }
-            Console.WriteLine("Press 0 to exit store");
         }
 
         public void PrintAxes()
@@ -403,31 +413,45 @@ namespace text_adventure_game.Models
         {
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                if (userChoice == 0)
+                foreach (Weapons weapon in Store.OfType<Sword>())
                 {
-                    //Exit store
-                }
-                else
-                {
-                    foreach (Weapons weapon in Store.OfType<Sword>())
+
+                    if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
                     {
-                        if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
+                        if (Inventory.Contains(weapon))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You already have this item in your inventory");
+                            Console.ReadKey();
+                        }
+                        else if (EquipInventory.Contains(weapon))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You already have this item equipped");
+                            Console.ReadKey();
+                        }
+                        else
                         {
                             Inventory.Add(weapon);
                             player.Gold -= weapon.GoldValue;
                             Console.Clear();
                             Console.WriteLine($"{weapon.Name} has been added to your inventory");
                             Console.ReadKey();
-                        }
-
-                        else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
-                            Console.ReadKey();
-                        }
+                        }  
                     }
-                }
+                    else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
+                        Console.ReadKey();
+                    }
+                }                
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Returning to town...");
+                Console.ReadKey();
             }
         }
 
@@ -435,15 +459,24 @@ namespace text_adventure_game.Models
         {
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                if (userChoice == 0)
+                foreach (Weapons weapon in Store.OfType<Axe>())
                 {
-                    //Exit store
-                }
-                else
-                {
-                    foreach (Weapons weapon in Store.OfType<Axe>())
+
+                    if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
                     {
-                        if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
+                        if (Inventory.Contains(weapon))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You already have this item in your inventory");
+                            Console.ReadKey();
+                        }
+                        else if (EquipInventory.Contains(weapon))
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You already have this item equipped");
+                            Console.ReadKey();
+                        }
+                        else
                         {
                             Inventory.Add(weapon);
                             player.Gold -= weapon.GoldValue;
@@ -451,24 +484,88 @@ namespace text_adventure_game.Models
                             Console.WriteLine($"{weapon.Name} has been added to your inventory");
                             Console.ReadKey();
                         }
-
-                        else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
-                        {
-                            Console.Clear();
-                            Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
-                            Console.ReadKey();
-                        }
+                    }
+                    else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
+                        Console.ReadKey();
                     }
                 }
+            }
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("Returning to town...");
+                Console.ReadKey();
             }
         }
 
         public void PrintInventory()
         {
+            int iD = 1;
+            Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
             foreach (Weapons weapon in Inventory)
             {
-                Console.WriteLine($"{weapon.Name}");
+                weapon.InventoryID = iD;
+                Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
                 Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                iD++;
+            }
+            //loop through armour and write it out
+            if(int.TryParse(Console.ReadLine(), out userChoice))
+            {
+                foreach (Weapons weapon in Inventory)
+                {
+                    if (userChoice == weapon.InventoryID && weaponID == 0)
+                    {
+                        weaponID = weapon.SlotID;
+                        EquipInventory.Add(weapon);
+                        player.Damage += weapon.DamageBoost;
+                        Inventory.Remove(weapon);
+                        Console.Clear();
+                        Console.WriteLine($"{weapon.Name} has been equipped");
+                        Console.ReadKey();
+                        break;
+                    }
+                    else if(weaponID == 1)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("You already have a weapon equipped. Enter Equipped items to remove it");
+                        Console.ReadKey();
+                    }
+                }
+                //Loop through armour and equip etc
+            }
+        }
+
+        public void PrintEquippedInventory()
+        {
+            int iD = 1;
+            Console.WriteLine("Gear        To remove an item press the key that correspons with the item\n");
+            foreach (Weapons weapon in EquipInventory)
+            {
+                weapon.InventoryID = iD;
+                Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
+                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                iD++;
+            }
+            if (int.TryParse(Console.ReadLine(), out userChoice))
+            {
+                foreach (Weapons weapon in EquipInventory)
+                {
+                    if (userChoice == weapon.InventoryID)
+                    {
+                        weaponID = 0;
+                        EquipInventory.Remove(weapon);
+                        player.Damage -= weapon.DamageBoost;
+                        Inventory.Add(weapon);
+                        Console.Clear();
+                        Console.WriteLine($"{weapon.Name} has been moved to the inventory");
+                        Console.ReadKey();
+                        break;
+                    }
+                }
             }
         }
     }
