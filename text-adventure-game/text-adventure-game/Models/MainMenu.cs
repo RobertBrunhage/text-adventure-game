@@ -11,6 +11,7 @@ namespace text_adventure_game.Models
     {
         public int userChoice = 0;
         public int weaponID;
+
         public Player player = new Player();
         public Monster monster = new Monster();
         public Weapons weapons = new Weapons();
@@ -18,6 +19,13 @@ namespace text_adventure_game.Models
         public List<Weapons> Store { get; set; }
         public List<Weapons> Inventory { get; set; }
         public List<Weapons> EquipInventory { get; set; }
+
+        private string _mapName1 = "The glimting forest";
+        private string _mapName2 = "Map 2";
+        private string _mapName3 = "Map 3";
+        private string _mapName4 = "Map 4";
+        private string _mapName5 = "Map 5";
+        private bool gameOn = true;
 
         public MainMenu()
         {
@@ -34,13 +42,6 @@ namespace text_adventure_game.Models
                 new Axe("Axe of Swaggins", 100, 7, 1)
             };
         }
-
-        private string _mapName1 = "The glimting forest";
-        private string _mapName2 = "Map 2";
-        private string _mapName3 = "Map 3";
-        private string _mapName4 = "Map 4";
-        private string _mapName5 = "Map 5";
-        private bool gameOn = true;
 
         public void StartProgram()
         {
@@ -61,7 +62,7 @@ namespace text_adventure_game.Models
                             player.AskName();
                             //player.AskAge();
                             Console.Clear();
-                            Introduction();
+                            //Introduction();
                             GameStart();
                             break;
                         case 2:
@@ -124,6 +125,7 @@ namespace text_adventure_game.Models
                             player.PrintStats();
                             break;
                         case 3:
+                            player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -137,8 +139,10 @@ namespace text_adventure_game.Models
                             //Show Equipped Items
                             break;
                         case 6:
-                            //Enter Tavern
-
+                            player.PrintStats();
+                            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP. This will take about 10 sec. Please wait...");
+                            Thread.Sleep(10000);
+                            player.Health = player.MaxHealth;
                             break;
                         case 7:
                             gameOn = false;
@@ -358,7 +362,7 @@ namespace text_adventure_game.Models
 
         public void ItemStore()
         {
-            player.Gold = 1000;
+            
             //WeaponType weaponType;
 
             Console.WriteLine("1. Swords");
@@ -570,11 +574,4 @@ namespace text_adventure_game.Models
         }
     }
 }
-//Equip items to the get stats to character
-//-Sort the Inventory by the Inventory ID
-//-choose item to be moved to EquipInventory
-//-EquipInventory List
-//-This list can only hold 1 of each classType
-//-Loop through all types in the EquipInventory list and add all the stats to player
 
-//Unequip sends the item the user chooses back to inventory //have to choose item by InventoryID and sort by InventoryID

@@ -9,6 +9,7 @@ namespace text_adventure_game.Models
     class Player
     {
         //Main things
+        public int MaxHealth;
         private int _Health;
         public int Health
         {
@@ -56,12 +57,14 @@ namespace text_adventure_game.Models
                     {
                         case 1:
                             Health = 100;
+                            MaxHealth = Health;
                             Damage = 1;
                             Armour = 0;
                             Gold = 0;
                             break;
                         case 2:
                             Health = 100;
+                            MaxHealth = Health;
                             Damage = 1;
                             Armour = 0;
                             Gold = 0;
