@@ -9,8 +9,28 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
+        public int userChoice = 0;
         public Player player = new Player();
         public Monster monster = new Monster();
+        public Weapons weapons = new Weapons();
+
+        public List<Weapons> Store { get; set; }
+        public List<Weapons> Inventory { get; set; }
+
+        public MainMenu()
+        {
+            Inventory = new List<Weapons>();
+
+            Store = new List<Weapons>()
+            {
+                //Swords
+                new Sword("Sword of swaggins", 30, 2, 1),
+
+                //Axes
+                new Axe("Axe of Swaggins", 100, 7, 1)
+            };
+        }
+
         private string _mapName1 = "The glimting forest";
         private string _mapName2 = "Map 2";
         private string _mapName3 = "Map 3";
@@ -20,7 +40,6 @@ namespace text_adventure_game.Models
 
         public void StartProgram()
         {
-            int userInput;
             do
             {
                 Console.Clear();
@@ -28,9 +47,9 @@ namespace text_adventure_game.Models
                 Console.WriteLine("1. New Game");
                 Console.WriteLine("2. Exit Game");
 
-                if (int.TryParse(Console.ReadLine(), out userInput))
+                if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
-                    switch (userInput)
+                    switch (userChoice)
                     {
                         case 1:
                             player.AskGender();
@@ -46,7 +65,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userInput < 1 || userInput > 2);
+            } while (userChoice < 1 || userChoice > 2);
 
         } // Player Creation
 
@@ -73,10 +92,9 @@ namespace text_adventure_game.Models
             Console.ReadKey();
         }
 
-        public void GameStart() // Will host most of the game
+        public void GameStart() //Returning here all the time
         {
             //Main Menu
-            int userChoice = 0;
             do
             {
                 player.PrintStats();
@@ -84,8 +102,9 @@ namespace text_adventure_game.Models
                 Console.WriteLine("1. Adventure");
                 Console.WriteLine("2. Inventory");
                 Console.WriteLine("3. Store");
-                Console.WriteLine("4. Tavern");
-                Console.WriteLine("5. Exit Game");
+                Console.WriteLine("4. Inventory");
+                Console.WriteLine("5. Tavern");
+                Console.WriteLine("6. Exit Game");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -97,17 +116,20 @@ namespace text_adventure_game.Models
                             break;
                         case 2:
                             player.PrintStats();
-                            //Open Inventory
                             break;
                         case 3:
                             player.PrintStats();
-                            //Open Store
+                            ItemStore();
                             break;
                         case 4:
                             player.PrintStats();
-                            //Enter Tavern
+                            PrintInventory();
+                            Console.ReadKey();
                             break;
                         case 5:
+                            //Enter Tavern
+                            break;
+                        case 6:
                             gameOn = false;
                             break;
                         default:
@@ -123,7 +145,6 @@ namespace text_adventure_game.Models
 
         public void AskAdventure()
         {
-            int userChoice = 0;
             do
             {
                 player.PrintStats();
@@ -174,7 +195,6 @@ namespace text_adventure_game.Models
             monster.ChooseMonster();
 
             string text;
-            int userChoice;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"You have entered the portal to: {_mapName1}... It's a vast world, you can see the wind blowing through the trees... But what is that! Something sparkled in the bushes.. And you can hear a sound coming from the left...\n");
@@ -237,6 +257,10 @@ namespace text_adventure_game.Models
                                     }
                                     else if (userChoice == 2)
                                     {
+                                        Console.Clear();
+                                        Console.WriteLine("You see a big rock, running as fast as you can. You hide and wait...." +
+                                            "You can see the portal back to town and make a run for it. Just as the monster was about to attack you jump through the portal");
+                                        Console.ReadKey();
                                         // Returning to menu
                                     }
                                     break;
@@ -250,7 +274,6 @@ namespace text_adventure_game.Models
 
         void CombatMonster()
         {
-            int userChoice;
             Random rndPlayerDamage = new Random();
 
             Random rndMonsterDamage = new Random();
@@ -321,5 +344,138 @@ namespace text_adventure_game.Models
                 // Returning to menu
             }
         }
+
+        public void ItemStore()
+        {
+
+            //WeaponType weaponType;
+
+            Console.WriteLine("1. Swords");
+            Console.WriteLine("2. Axes");
+
+            do
+            {
+                if (int.TryParse(Console.ReadLine(), out userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            Console.Clear();
+                            player.PrintStats();
+                            PrintSwords();
+                            BuySword();
+                            break;
+                        case 2:
+                            Console.Clear();
+                            player.PrintStats();
+                            PrintAxes();
+                            BuyAxe();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } while (userChoice < 1 || userChoice > 2);
+        }
+
+        public void PrintSwords()
+        {
+            foreach (Weapons weapon in Store.OfType<Sword>())
+            {
+                Console.WriteLine($"1. {weapon.Name}");
+                Console.WriteLine($"Price: {weapon.GoldValue} gold");
+                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+            }
+            Console.WriteLine("Press 0 to exit store");
+        }
+
+        public void PrintAxes()
+        {
+            foreach (Weapons weapon in Store.OfType<Axe>())
+            {
+                Console.WriteLine($"1. {weapon.Name}");
+                Console.WriteLine($"Price: {weapon.GoldValue} gold");
+                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+            }
+        }
+
+        public void BuySword()
+        {
+            if (int.TryParse(Console.ReadLine(), out userChoice))
+            {
+                if (userChoice == 0)
+                {
+                    //Exit store
+                }
+                else
+                {
+                    foreach (Weapons weapon in Store.OfType<Sword>())
+                    {
+                        if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
+                        {
+                            Inventory.Add(weapon);
+                            player.Gold -= weapon.GoldValue;
+                            Console.Clear();
+                            Console.WriteLine($"{weapon.Name} has been added to your inventory");
+                            Console.ReadKey();
+                        }
+
+                        else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+            }
+        }
+
+        public void BuyAxe()
+        {
+            if (int.TryParse(Console.ReadLine(), out userChoice))
+            {
+                if (userChoice == 0)
+                {
+                    //Exit store
+                }
+                else
+                {
+                    foreach (Weapons weapon in Store.OfType<Axe>())
+                    {
+                        if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
+                        {
+                            Inventory.Add(weapon);
+                            player.Gold -= weapon.GoldValue;
+                            Console.Clear();
+                            Console.WriteLine($"{weapon.Name} has been added to your inventory");
+                            Console.ReadKey();
+                        }
+
+                        else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
+                        {
+                            Console.Clear();
+                            Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
+                            Console.ReadKey();
+                        }
+                    }
+                }
+            }
+        }
+
+        public void PrintInventory()
+        {
+            foreach (Weapons weapon in Inventory)
+            {
+                Console.WriteLine($"{weapon.Name}");
+                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+            }
+        }
     }
 }
+//Equip items to the get stats to character
+//-EquipInventory List
+//-This list can only hold 1 of each classType
+//-Loop through all types in the EquipInventory list and add all the stats to player
+
+//Unequip sends the item the user chooses back to inventory //have to choose item by InventoryID and sort by InventoryID
