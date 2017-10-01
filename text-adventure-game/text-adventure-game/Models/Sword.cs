@@ -8,12 +8,13 @@ namespace text_adventure_game.Models
 {
     class Sword : Weapons
     {
-        public Sword(string name, int goldValue, int damageBoost, int storeID)
+        public Sword(string name, int goldValue, int lowDamageBoost, int highDamageBoost)
         {
             base.Name = name;
             base.GoldValue = goldValue;
-            base.DamageBoost = damageBoost;
-            base.StoreID = storeID;
+            base.LowDamageBoost = lowDamageBoost;
+            base.HighDamageBoost = highDamageBoost;
+            base.StoreID = 0;
             base.SlotID = 1;
         }
     }

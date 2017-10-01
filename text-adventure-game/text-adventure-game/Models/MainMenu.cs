@@ -9,8 +9,8 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        public int userChoice = 0;
         public int weaponID;
+        public bool run = false;
 
         public Player player = new Player();
         public Monster monster = new Monster();
@@ -21,8 +21,8 @@ namespace text_adventure_game.Models
         public List<Weapons> EquipInventory { get; set; }
 
         private string _mapName1 = "The glimting forest";
-        private string _mapName2 = "Map 2";
-        private string _mapName3 = "Map 3";
+        private string _mapName2 = "The reversed forest";
+        private string _mapName3 = "the black forest";
         private string _mapName4 = "Map 4";
         private string _mapName5 = "Map 5";
         private bool gameOn = true;
@@ -36,17 +36,23 @@ namespace text_adventure_game.Models
             Store = new List<Weapons>()
             {
                 //Swords
-                new Sword("Sword of swaggins", 30, 2, 1),
+                new Sword("Sword of swaggins", 30, 1, 2),
+                new Sword("Sword of swaggins2", 70, 2, 3),
+                new Sword("Sword of swaggins3", 120, 2, 4),
 
                 //Axes
-                new Axe("Axe of Swaggins", 100, 7, 1)
+                new Axe("Axe of Swaggins", 50, 2, 2),
+                new Axe("Axe of Swaggins2", 90, 2, 4),
+                new Axe("Axe of Swaggins3", 150, 3, 5)
             };
         }
 
         public void StartProgram()
         {
+            int userChoice = 0;
             do
             {
+                
                 Console.Clear();
                 Console.WriteLine("This is the main menu. Select from the menu below:\n");
                 Console.WriteLine("1. New Game");
@@ -64,6 +70,7 @@ namespace text_adventure_game.Models
                             Console.Clear();
                             //Introduction();
                             GameStart();
+                            userChoice = 1;
                             break;
                         case 2:
                             //Exit Game
@@ -100,17 +107,22 @@ namespace text_adventure_game.Models
         public void GameStart() //Returning here all the time
         {
             //Main Menu
+            int userChoice = 0;
             do
             {
+                if (player.Health <= 0)
+                {
+                    Tavern();
+                }
+                Console.Clear();
                 player.PrintStats();
 
                 Console.WriteLine("1. Adventure");
-                Console.WriteLine("2. Inventory");
-                Console.WriteLine("3. Store");
-                Console.WriteLine("4. Inventory");
-                Console.WriteLine("5. Equipped Items");
-                Console.WriteLine("6. Tavern");
-                Console.WriteLine("7. Exit Game");
+                Console.WriteLine("2. Store");
+                Console.WriteLine("3. Inventory");
+                Console.WriteLine("4. Equipped Items");
+                Console.WriteLine("5. Tavern");
+                Console.WriteLine("6. Exit Game");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -122,31 +134,25 @@ namespace text_adventure_game.Models
 
                             break;
                         case 2:
-                            player.PrintStats();
-                            break;
-                        case 3:
                             player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
-                        case 4:
+                        case 3:
                             player.PrintStats();
                             PrintInventory();
                             break;
-                        case 5:
+                        case 4:
                             player.PrintStats();
                             PrintEquippedInventory();
-                            //Show Equipped Items
+                            break;
+                        case 5:
+                            Tavern();
                             break;
                         case 6:
-                            player.PrintStats();
-                            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP. This will take about 10 sec. Please wait...");
-                            Thread.Sleep(10000);
-                            player.Health = player.MaxHealth;
-                            break;
-                        case 7:
                             gameOn = false;
                             break;
+
                         default:
                             Console.Clear();
                             Console.WriteLine($"{player.Name}, to the left of each word you can see a number. Enter the number for where you want to go.");
@@ -154,12 +160,22 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 6 || gameOn == true);
+            } while (gameOn == true);
             Console.Clear();
+        }
+
+        public void Tavern()
+        {
+            Console.Clear();
+            player.PrintStats();
+            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP. This will take about 10 sec. Please wait...");
+            Thread.Sleep(10000);
+            player.Health = player.MaxHealth;
         }
 
         public void AskAdventure()
         {
+            int userChoice = 0;
             do
             {
                 player.PrintStats();
@@ -179,10 +195,10 @@ namespace text_adventure_game.Models
                             Map1();
                             break;
                         case 2:
-                            //Map 2
+                            Map2();
                             break;
                         case 3:
-                            //Map 3
+                            Map3();
                             break;
                         case 4:
                             //Map 4
@@ -208,7 +224,7 @@ namespace text_adventure_game.Models
         {
             monster.MonsterDif = 1;
             monster.ChooseMonster();
-
+            int userChoice = 0;
             string text;
             Console.Clear();
             player.PrintStats();
@@ -229,8 +245,7 @@ namespace text_adventure_game.Models
                             Console.ReadKey();
                             Console.Clear();
 
-                            CombatMonster(); //If we lose the battle or press run we return to StartGame();
-                            //Tell a story then return to GameStart();
+                            CombatMonster();
                             // Returning to menu
                             break;
                         case 2:
@@ -246,29 +261,32 @@ namespace text_adventure_game.Models
                                     if (userChoice == 1)
                                     {
                                         CombatMonster();
-                                        text = "A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...";
-                                        foreach (char c in text)
+                                        if(monster.Health <= 0)
                                         {
-                                            Console.Write(c);
-                                            Thread.Sleep(30);
-                                        }
-                                        
-                                        Console.ReadKey();
-                                        Console.Clear();
-                                        player.PrintStats();
+                                            text = "A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...";
+                                            foreach (char c in text)
+                                            {
+                                                Console.Write(c);
+                                                Thread.Sleep(30);
+                                            }
 
-                                        Console.WriteLine("1. Adventure");
-                                        Console.WriteLine("2. Inventory");
-                                        Console.WriteLine("3. Store");
-                                        Console.WriteLine("4. Tavern");
-                                        text = "\nWhat was that...?";
-                                        foreach (char c in text)
-                                        {
-                                            Console.Write(c);
-                                            Thread.Sleep(30);
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                            player.PrintStats();
+
+                                            Console.WriteLine("1. Adventure");
+                                            Console.WriteLine("2. Inventory");
+                                            Console.WriteLine("3. Store");
+                                            Console.WriteLine("4. Tavern");
+                                            text = "\nWhat was that...?";
+                                            foreach (char c in text)
+                                            {
+                                                Console.Write(c);
+                                                Thread.Sleep(30);
+                                            }
+                                            Console.ReadKey();
                                         }
-                                        Console.ReadKey();
-                                        GameStart();
+                                        // Returning to menu
                                     }
                                     else if (userChoice == 2)
                                     {
@@ -287,8 +305,216 @@ namespace text_adventure_game.Models
             } while ((userChoice < 1 || userChoice > 2));
         }
 
+        public void Map2()
+        {
+            int userChoice = 0;
+
+            string text;
+            Console.Clear();
+            player.PrintStats();
+            Console.WriteLine($"You have entered the portal to: {_mapName2}... This is a dark forest guarded by higher tier monsters. But what are they guarding you may ask? Well jesus I don't know " +
+                $"you will have to find out! I won't be holding your hand the whole game...There are two roads the left road leads to an even darker side of the forest while the right leads to a lighter part. " +
+                $"which way would you like to go?\n");
+            Console.WriteLine("1. Through the left road");
+            Console.WriteLine("2. Through the right road");
+            do
+            {
+                if (int.TryParse(Console.ReadLine(), out userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            monster.MonsterDif = 1;
+                            monster.ChooseMonster();
+                            Console.WriteLine("What is that...? You can't be serious???");
+                            Console.ReadKey();
+                            Console.WriteLine($"A {monster.Name} has appeared...But this is a darker dark forest.");
+                            Console.ReadKey();
+                            Console.Clear();
+
+                            CombatMonster();
+                            if(monster.Health <= 0)
+                            {
+                                Console.Clear();
+                                player.PrintStats();
+
+                                Console.WriteLine("1. Adventure");
+                                Console.WriteLine("2. Inventory");
+                                Console.WriteLine("3. Store");
+                                Console.WriteLine("4. Tavern");
+                                text = "\nWell that was a bit boring right? You should probably go to the right next time...";
+                                foreach (char c in text)
+                                {
+                                    Console.Write(c);
+                                    Thread.Sleep(30);
+                                }
+                                Console.ReadKey();
+                            }
+                            // Returning to menu
+                            break;
+                        case 2:
+                            monster.MonsterDif = 2;
+                            monster.ChooseMonster();
+                            do
+                            {
+                                Console.Clear();
+                                player.PrintStats();
+                                Console.WriteLine($"As you walk, the forest becomes more lit up for each step you take. Ohh look it's a happy little cow down the road!...But wait...It's running away " +
+                                    $"from something... you can see a {monster.Name} chasing it. Do you want to save the cow?");
+                                Console.WriteLine($"1. Save the cow and attack the {monster.Name}");
+                                Console.WriteLine($"2. Run away like a coward");
+                                if (int.TryParse(Console.ReadLine(), out userChoice))
+                                {
+                                    if (userChoice == 1)
+                                    {
+                                        CombatMonster();
+                                        if (monster.Health <= 0)
+                                        {
+                                            text = "You saved the cow!! You must be damn proud of yourself!";
+                                            foreach (char c in text)
+                                            {
+                                                Console.Write(c);
+                                                Thread.Sleep(30);
+                                            }
+
+                                            Console.ReadKey();
+                                            Console.Clear();
+                                            player.PrintStats();
+
+                                            Console.WriteLine("1. Adventure");
+                                            Console.WriteLine("2. Inventory");
+                                            Console.WriteLine("3. Store");
+                                            Console.WriteLine("4. Tavern");
+                                            text = "\nYou are probably more proud of defeating the monster then saving the cow...right?";
+                                            foreach (char c in text)
+                                            {
+                                                Console.Write(c);
+                                                Thread.Sleep(30);
+                                            }
+                                            Console.ReadKey();
+                                        }
+                                        // Returning to menu
+                                    }
+                                    else if (userChoice == 2)
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("You walk back the road again, leaving the scared cow as you return to town...");
+                                        Console.ReadKey();
+                                        // Returning to menu
+                                    }
+                                    break;
+                                }
+                            } while (userChoice < 1 || userChoice > 2);
+                            break;
+                    }
+                }
+            } while ((userChoice < 1 || userChoice > 2));
+        }
+
+        public void Map3()
+        {
+            int userChoice = 0;
+            monster.MonsterDif = 3;
+            monster.ChooseMonster();
+
+            string text;
+            Console.Clear();
+            player.PrintStats();
+            Console.WriteLine($"Wow you sure have come a long way if you are already here! No {player.Class} has even gotten this far... good job {player.Name}! " +
+                $"This place is called {_mapName3} and the monsters here are stronger than the monsters from {_mapName1} and {_mapName2} combined! This forest though...Is really dark and I can't describe " +
+                $"your options for where you can go so you will have to guess! \n");
+            Console.WriteLine("1. Go forward");
+            Console.WriteLine("2. Stay");
+            do
+            {
+                if (int.TryParse(Console.ReadLine(), out userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            do
+                            {
+                                Console.Clear();
+                                player.PrintStats();
+                                Console.WriteLine($"As you walk forward you trip and a stone...careful it's dark I said... On the ground you notice that there is a big whole. Would you like to crawl " +
+                                    $"in to the dark hole or jump over it?");
+                                Console.WriteLine($"1. Crawl in to the dark hole");
+                                Console.WriteLine($"2. Jump over the hole");
+                                if (int.TryParse(Console.ReadLine(), out userChoice))
+                                {
+                                    if (userChoice == 1)
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"A {monster.Name} was sleeping inside the whole and woke up as you crawled. It saw you and went for attack");
+                                        Console.ReadKey();
+
+                                        CombatMonster();
+                                        if (monster.Health <= 0)
+                                        {
+                                            text = $"You slayed the {monster.Name} though this was a magical bear you got teleported back to town...";
+                                            foreach (char c in text)
+                                            {
+                                                Console.Write(c);
+                                                Thread.Sleep(30);
+                                            }
+                                            Console.ReadKey();
+                                        }
+                                    }
+                                    else if (userChoice == 2)
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine($"You jumped over the whole but there was a {monster.Name} running towards you!");
+                                        Console.ReadKey();
+                                        CombatMonster();
+                                        if(monster.Health <= 0)
+                                        {
+                                            Console.WriteLine($"After the fight with the {monster.Name} you see another portal and as you head through it you come back to town...");
+
+                                            Console.ReadKey();
+                                        }
+                                        // Returning to menu
+                                    }
+                                    break;
+                                }
+                            } while (userChoice < 1 || userChoice > 2);
+                            break;
+                        case 2:
+                            Console.WriteLine("What is that...?");
+                            Console.ReadKey();
+                            Console.WriteLine($"A {monster.Name} has appeared...");
+                            Console.ReadKey();
+                            Console.Clear();
+
+                            CombatMonster();
+                            if(run == false)
+                            {
+                                Console.Clear();
+                                player.PrintStats();
+
+                                Console.WriteLine("1. Adventure");
+                                Console.WriteLine("2. Inventory");
+                                Console.WriteLine("3. Store");
+                                Console.WriteLine("4. Tavern");
+                                text = "\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop";
+                                foreach (char c in text)
+                                {
+                                    Console.Write(c);
+                                    Thread.Sleep(30);
+                                }
+                                Console.ReadKey();
+
+                            }
+                            run = false;
+                            // Returning to menu
+                            break;
+                    }
+                }
+            } while ((userChoice < 1 || userChoice > 2));
+        }
+
         void CombatMonster()
         {
+            int userChoice = 0;
             Random rndPlayerDamage = new Random();
 
             Random rndMonsterDamage = new Random();
@@ -315,7 +541,7 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
-                            int playerDamage = rndPlayerDamage.Next(1, player.Damage + 1);
+                            int playerDamage = rndPlayerDamage.Next(1, player.LowestDamage + 1);
                             int monsterDamage = rndMonsterDamage.Next(1, monster.Damage + 1);
 
                             monster.Health -= playerDamage;
@@ -325,17 +551,13 @@ namespace text_adventure_game.Models
                             Console.ReadKey();
                             break;
                         case 2:
-                            //break out of the switch
+                            run = true;
                             break;
                         default:
                             break;
                     }
                 }
-                if (userChoice == 2)
-                {
-                    break; // Break out of the do while loop
-                }
-            } while (monster.Health > 0 && player.Health > 0);
+            } while (monster.Health > 0 && player.Health > 0 && run == false);
             Console.Clear();
             if (monster.Health <= 0)
             {
@@ -349,20 +571,23 @@ namespace text_adventure_game.Models
             else if (player.Health <= 0)
             {
                 Console.WriteLine("You have died");
+                player.Health = 0;
                 Console.ReadKey();
+                Console.Clear();
                 // Returning to menu
             }
             else if (userChoice == 2)
             {
                 Console.WriteLine("You will now be returned to the menu");
                 Console.ReadKey();
+                Console.Clear();
                 // Returning to menu
             }
         }
 
         public void ItemStore()
         {
-            
+            int userChoice = 0;
             //WeaponType weaponType;
 
             Console.WriteLine("1. Swords");
@@ -390,31 +615,39 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 && userChoice > 2);
+            } while (userChoice < 1 || userChoice > 2);
         }
 
         public void PrintSwords()
         {
+            int iD = 1;
             foreach (Weapons weapon in Store.OfType<Sword>())
             {
-                Console.WriteLine($"1. {weapon.Name}");
+                weapon.StoreID = iD;
+                Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
                 Console.WriteLine($"Price: {weapon.GoldValue} gold");
-                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                Console.WriteLine($"Damage : {weapon.LowDamageBoost} - {weapon.HighDamageBoost} damage increase\n");
+                
+                iD++;
             }
         }
 
         public void PrintAxes()
         {
+            int iD = 1;
             foreach (Weapons weapon in Store.OfType<Axe>())
             {
-                Console.WriteLine($"1. {weapon.Name}");
+                weapon.StoreID = iD;
+                Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
                 Console.WriteLine($"Price: {weapon.GoldValue} gold");
-                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                Console.WriteLine($"Damage: {weapon.LowDamageBoost} - {weapon.HighDamageBoost} damage increase\n");
+                iD++;
             }
         }
 
         public void BuySword()
         {
+            int userChoice = 0;
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
                 foreach (Weapons weapon in Store.OfType<Sword>())
@@ -461,6 +694,7 @@ namespace text_adventure_game.Models
 
         public void BuyAxe()
         {
+            int userChoice = 0;
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
                 foreach (Weapons weapon in Store.OfType<Axe>())
@@ -507,13 +741,14 @@ namespace text_adventure_game.Models
 
         public void PrintInventory()
         {
+            int userChoice = 0;
             int iD = 1;
             Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
             foreach (Weapons weapon in Inventory)
             {
                 weapon.InventoryID = iD;
                 Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
-                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                Console.WriteLine($"stats: {weapon.LowDamageBoost} damage increase\n");
                 iD++;
             }
             //loop through armour and write it out
@@ -525,7 +760,8 @@ namespace text_adventure_game.Models
                     {
                         weaponID = weapon.SlotID;
                         EquipInventory.Add(weapon);
-                        player.Damage += weapon.DamageBoost;
+                        player.LowestDamage += weapon.LowDamageBoost;
+                        player.HigestDamage += weapon.HighDamageBoost;
                         Inventory.Remove(weapon);
                         Console.Clear();
                         Console.WriteLine($"{weapon.Name} has been equipped");
@@ -545,13 +781,14 @@ namespace text_adventure_game.Models
 
         public void PrintEquippedInventory()
         {
+            int userChoice = 0;
             int iD = 1;
             Console.WriteLine("Gear        To remove an item press the key that correspons with the item\n");
             foreach (Weapons weapon in EquipInventory)
             {
                 weapon.InventoryID = iD;
                 Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
-                Console.WriteLine($"stats: {weapon.DamageBoost} damage increase\n");
+                Console.WriteLine($"stats: {weapon.LowDamageBoost} damage increase\n");
                 iD++;
             }
             if (int.TryParse(Console.ReadLine(), out userChoice))
@@ -562,7 +799,8 @@ namespace text_adventure_game.Models
                     {
                         weaponID = 0;
                         EquipInventory.Remove(weapon);
-                        player.Damage -= weapon.DamageBoost;
+                        player.LowestDamage -= weapon.LowDamageBoost;
+                        player.HigestDamage -= weapon.LowDamageBoost;
                         Inventory.Add(weapon);
                         Console.Clear();
                         Console.WriteLine($"{weapon.Name} has been moved to the inventory");

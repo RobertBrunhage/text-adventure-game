@@ -16,7 +16,8 @@ namespace text_adventure_game.Models
     {
         public string Name { get; set; }
         public int GoldValue { get; set; }
-        public int DamageBoost { get; set; }
+        public int LowDamageBoost { get; set; }
+        public int HighDamageBoost { get; set; }
         public int StoreID { get; set; }
         public int InventoryID { get; set; }
         public int SlotID { get; set; }
