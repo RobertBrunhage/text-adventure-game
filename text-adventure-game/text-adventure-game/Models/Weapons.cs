@@ -21,6 +21,7 @@ namespace text_adventure_game.Models
         public int StoreID { get; set; }
         public int InventoryID { get; set; }
         public int SlotID { get; set; }
+        public string Type { get; set; }
 
         //public void Buy()
         //{
