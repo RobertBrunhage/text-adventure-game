@@ -25,6 +25,7 @@ namespace text_adventure_game.Models
         private string _mapName3 = "the black forest";
         private string _mapName4 = "Map 4";
         private string _mapName5 = "Map 5";
+        private int sort = 0; // Print and buy method will use this variable
         private bool gameOn = true;
 
         public MainMenu()
@@ -43,7 +44,10 @@ namespace text_adventure_game.Models
                 //Axes
                 new Axe("Axe of Swaggins", 50, 2, 2),
                 new Axe("Axe of Swaggins2", 90, 2, 4),
-                new Axe("Axe of Swaggins3", 150, 3, 5)
+                new Axe("Axe of Swaggins3", 150, 3, 5),
+
+                //Maces
+                new Mace("Mace of Swaggins", 40, 1, 1)
             };
         }
 
@@ -597,6 +601,7 @@ namespace text_adventure_game.Models
 
             Console.WriteLine("1. Swords");
             Console.WriteLine("2. Axes");
+            Console.WriteLine("3. Maces");
 
             do
             {
@@ -607,39 +612,54 @@ namespace text_adventure_game.Models
                         case 1:
                             Console.Clear();
                             player.PrintStats();
-                            PrintSwords();
-                            BuySword();
+                            sort = 1;
+                            PrintWeapons();
+                            BuyWeapons();
                             break;
                         case 2:
                             Console.Clear();
                             player.PrintStats();
-                            PrintAxes();
-                            BuyAxe();
+                            sort = 2;
+                            PrintWeapons();
+                            BuyWeapons();
+                            break;
+                        case 3:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 3;
+                            PrintWeapons();
+                            
+                            BuyWeapons();
                             break;
                         default:
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 2);
+            } while (userChoice < 1 || userChoice > 3);
         }
 
-        public void PrintSwords()
+        public void PrintWeapons()
         {
-            int iD = 1;
-            foreach (Weapons weapon in Store.OfType<Sword>())
+            string type = string.Empty;
+            var Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            if (sort == 1)
             {
-                weapon.StoreID = iD;
-                Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
-                Console.WriteLine($"Price: {weapon.GoldValue} gold");
-                Console.WriteLine($"Damage : {weapon.LowDamageBoost} - {weapon.HighDamageBoost} damage increase\n");
-                iD++;
+                type = "Sword";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
-        }
+            else if (sort == 2)
+            {
+                type = "Axe";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            } 
+            else if (sort == 3)
+            {
+                type = "Mace";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            }
 
-        public void PrintAxes()
-        {
             int iD = 1;
-            foreach (Weapons weapon in Store.OfType<Axe>())
+            foreach (Weapons weapon in Name)
             {
                 weapon.StoreID = iD;
                 Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
@@ -649,59 +669,29 @@ namespace text_adventure_game.Models
             }
         }
 
-        public void BuySword()
+        public void BuyWeapons()
         {
+            string type = string.Empty;
+            var Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            if (sort == 1)
+            {
+                type = "Sword";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            }
+            else if (sort == 2)
+            {
+                type = "Axe";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            }
+            else if (sort == 3)
+            {
+                type = "Mace";
+                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            }
             int userChoice = 0;
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in Store.OfType<Sword>())
-                {
-
-                    if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
-                    {
-                        if (Inventory.Contains(weapon))
-                        {
-                            Console.Clear();
-                            Console.WriteLine("You already have this item in your inventory");
-                            Console.ReadKey();
-                        }
-                        else if (EquipInventory.Contains(weapon))
-                        {
-                            Console.Clear();
-                            Console.WriteLine("You already have this item equipped");
-                            Console.ReadKey();
-                        }
-                        else
-                        {
-                            Inventory.Add(weapon);
-                            player.Gold -= weapon.GoldValue;
-                            Console.Clear();
-                            Console.WriteLine($"{weapon.Name} has been added to your inventory");
-                            Console.ReadKey();
-                        }  
-                    }
-                    else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
-                        Console.ReadKey();
-                    }
-                }                
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("Returning to town...");
-                Console.ReadKey();
-            }
-        }
-
-        public void BuyAxe()
-        {
-            int userChoice = 0;
-            if (int.TryParse(Console.ReadLine(), out userChoice))
-            {
-                foreach (Weapons weapon in Store.OfType<Axe>())
+                foreach (Weapons weapon in Name)
                 {
 
                     if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
