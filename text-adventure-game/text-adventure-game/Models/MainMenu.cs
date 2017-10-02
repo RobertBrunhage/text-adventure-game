@@ -26,6 +26,7 @@ namespace text_adventure_game.Models
         private string _mapName4 = "Map 4";
         private string _mapName5 = "Map 5";
         private int sort = 0; // Print and buy method will use this variable
+        private int mapComplete = 0;
         private bool gameOn = true;
 
         public MainMenu()
@@ -74,7 +75,7 @@ namespace text_adventure_game.Models
                             player.AskName();
                             //player.AskAge();
                             Console.Clear();
-                            Introduction();
+                            Introduction(); // Glöm inte speed på att den skriver ut
                             GameStart();
                             userChoice = 1;
                             break;
@@ -101,7 +102,12 @@ namespace text_adventure_game.Models
             Console.ReadKey();
 
             Console.Clear();
-            Console.WriteLine("The game menu will look like this below, but also show your stats\n");
+            Console.WriteLine("There will be a total of 5 worlds. But you can not go to the second world right away, nononononoooo. You will have to find keys to open the portals " +
+                "They are hidden in each world you will not find them right away. We really do not know what these keys do yet because no person has ever gotten even one!..Well good luck!");
+            Console.ReadKey();
+
+            Console.Clear();
+            Console.WriteLine("The town will look like this below\n");
             Console.WriteLine("1. Adventure");
             Console.WriteLine("2. Inventory");
             Console.WriteLine("3. Store");
@@ -197,13 +203,22 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
-                            Map1();
+                            if (mapComplete >= 0)
+                            {
+                                Map1();
+                            }
                             break;
                         case 2:
-                            Map2();
+                            if (mapComplete >= 1)
+                            {
+                                Map2();
+                            }
                             break;
                         case 3:
-                            Map3();
+                            if (mapComplete >= 2)
+                            {
+                                Map3();
+                            }
                             break;
                         case 4:
                             //Map 4
@@ -295,6 +310,11 @@ namespace text_adventure_game.Models
                                         }
                                         Console.ResetColor();
                                         // Returning to menu
+
+                                        mapComplete++;
+                                        Console.Clear();
+                                        Console.WriteLine($"You unlocked {_mapName2}");
+                                        Console.ReadKey();
                                     }
                                     else if (userChoice == 2)
                                     {
@@ -402,6 +422,10 @@ namespace text_adventure_game.Models
                                             Console.ReadKey();
                                         }
                                         // Returning to menu
+                                        mapComplete++;
+                                        Console.Clear();
+                                        Console.WriteLine($"You unlocked {_mapName3}");
+                                        Console.ReadKey();
                                     }
                                     else if (userChoice == 2)
                                     {
@@ -466,6 +490,7 @@ namespace text_adventure_game.Models
                                                 Thread.Sleep(30);
                                             }
                                             Console.ReadKey();
+                                            mapComplete++;
                                         }
                                     }
                                     else if (userChoice == 2)
@@ -481,6 +506,10 @@ namespace text_adventure_game.Models
                                             Console.ReadKey();
                                         }
                                         // Returning to menu
+                                        //mapComplete++;
+                                        //Console.Clear();
+                                        //Console.WriteLine($"You unlocked {_mapName3}");
+                                        //Console.ReadKey();
                                     }
                                     break;
                                 }
@@ -550,8 +579,8 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
-                            int playerDamage = rndPlayerDamage.Next(1, player.LowestDamage + 1);
-                            int monsterDamage = rndMonsterDamage.Next(1, monster.Damage + 1);
+                            int playerDamage = rndPlayerDamage.Next(player.LowestDamage, player.HigestDamage + 1);
+                            int monsterDamage = rndMonsterDamage.Next(monster.MinDamage, monster.MaxDamage + 1);
 
                             monster.Health -= playerDamage;
                             Console.WriteLine($"\nYou did {playerDamage} damage on the monster");
@@ -571,7 +600,7 @@ namespace text_adventure_game.Models
             Console.ResetColor();
             if (monster.Health <= 0)
             {
-                int monsterGold = rndMonsterGold.Next(3, monster.GoldValue + 1);
+                int monsterGold = rndMonsterGold.Next(monster.MinGold, monster.MaxGold + 1);
                 Console.WriteLine("Monster has been defeated!");
                 Console.WriteLine($"You have been awarded {monsterGold} gold");
                 player.Gold += monsterGold;

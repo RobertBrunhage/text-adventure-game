@@ -19,8 +19,10 @@ namespace text_adventure_game.Models
 
         public int MonsterDif { get; set; }
         public int Health { get; set; }
-        public int GoldValue { get; set; }
-        public int Damage { get; set; }
+        public int MinGold { get; set; }
+        public int MaxGold { get; set; }
+        public int MinDamage { get; set; }
+        public int MaxDamage { get; set; }
         public string Name { get; set; }
 
         public void ChooseMonster()
@@ -31,20 +33,26 @@ namespace text_adventure_game.Models
             {
                 case Monsters.Monster1:
                     Health = 20;
-                    GoldValue = 10;
-                    Damage = 4;
+                    MinGold = 3;
+                    MaxGold = 6;
+                    MinDamage = 1;
+                    MaxDamage = 5;
                     Name = "Snake";
                     break;
                 case Monsters.Monster2:
                     Health = 35;
-                    GoldValue = 15;
-                    Damage = 8;
+                    MinGold = 9;
+                    MaxGold = 14;
+                    MinDamage = 3;
+                    MaxDamage = 7;
                     Name = "Wolf";
                     break;
                 case Monsters.Monster3:
                     Health = 45;
-                    GoldValue = 30;
-                    Damage = 12;
+                    MinGold = 20;
+                    MaxGold = 30;
+                    MinDamage = 6;
+                    MaxDamage = 10;
                     Name = "Bear";
                     break;
                 case Monsters.Monster4:
