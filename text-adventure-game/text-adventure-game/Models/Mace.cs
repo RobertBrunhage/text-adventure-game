@@ -14,7 +14,7 @@ namespace text_adventure_game.Models
             base.GoldValue = goldValue;
             base.LowDamageBoost = lowDamageBoost;
             base.HighDamageBoost = highDamageBoost;
-            base.StoreID = 0;
+            base.ID = 0;
             base.SlotID = 1;
             base.Type = "Mace";
             base.BaseType = "Weapon";

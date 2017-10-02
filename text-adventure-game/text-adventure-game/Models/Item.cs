@@ -6,47 +6,17 @@ using System.Threading.Tasks;
 
 namespace text_adventure_game.Models
 {
-    //enum WeaponType
-    //{
-    //    sword = 1,
-    //    axe
-    //};
-
     class Item : IItem
     {
-        public string Name { get; set; }
-        public int GoldValue { get; set; }
-        public int LowDamageBoost { get; set; }
-        public int HighDamageBoost { get; set; }
-        public int StoreID { get; set; }
-        public int InventoryID { get; set; }
-        public int SlotID { get; set; }
-        public string Type { get; set; }
-        public string BaseType { get; set; }
-        public int Armour { get; set; }
-
-        //public void Buy()
-        //{
-        //    Console.WriteLine($"{Name} has been bought");
-        //}
-
-        //public void Sell()
-        //{
-        //    Console.WriteLine($"sold for {GoldValue} gold");
-        //}
-
-        //public Weapons(WeaponType weaponType)
-        //{
-        //    switch (weaponType)
-        //    {
-        //        case WeaponType.sword:
-        //            break;
-        //        case WeaponType.axe:
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //}
-
+        public string Name { get; set; }            //Name of item
+        public int GoldValue { get; set; }          //What the item will cost
+        public int LowDamageBoost { get; set; }     //The damage increase it will do to minimun damage of player
+        public int HighDamageBoost { get; set; }    //The damage increase it will do to maximum damage of player
+        public int ID { get; set; }                 //Handles the sorting of items in store and inventory
+        public string Type { get; set; }            //Helps with printing out for example all axes
+        public int SlotID { get; set; }             //Checks if we have a item equipped or not
+        public string BaseType { get; set; }        //A string of either weapon or armour. Simplifies for user
+        public int Armour { get; set; }             //The armour of each item
+        public int HealthIncrease { get; set; }
     }
 }
