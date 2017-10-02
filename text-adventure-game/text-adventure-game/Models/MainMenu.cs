@@ -37,17 +37,19 @@ namespace text_adventure_game.Models
             Store = new List<Weapons>()
             {
                 //Swords
-                new Sword("Sword of swaggins", 30, 1, 2),
-                new Sword("bword of swaggins2", 70, 2, 3),
-                new Sword("cword of swaggins3", 120, 2, 4),
+                new Sword("Vorpal Blade", 30, 1, 2),
+                new Sword("Dragon Slayer", 70, 2, 3),
+                new Sword("Sword of Judgment", 120, 2, 4),
 
                 //Axes
-                new Axe("Axe of Swaggins", 50, 2, 2),
-                new Axe("Axe of Swaggins2", 90, 2, 4),
-                new Axe("Axe of Swaggins3", 150, 3, 5),
+                new Axe("Blight's Plight", 50, 2, 2),
+                new Axe("The Grim Cleaver", 90, 2, 4),
+                new Axe("Harbringer of Death", 150, 3, 5),
 
                 //Maces
-                new Mace("Mace of Swaggins", 40, 1, 1)
+                new Mace("Skull Smasher", 30, 1, 2),
+                new Mace("Blood Shedder", 100, 3, 4),
+                new Mace("Harvester", 700, 10, 20)
             };
         }
 
@@ -72,7 +74,7 @@ namespace text_adventure_game.Models
                             player.AskName();
                             //player.AskAge();
                             Console.Clear();
-                            //Introduction();
+                            Introduction();
                             GameStart();
                             userChoice = 1;
                             break;
@@ -135,7 +137,6 @@ namespace text_adventure_game.Models
                         case 1:
                             player.PrintStats();
                             AskAdventure();
-
                             break;
                         case 2:
                             player.Gold = 1000; // cheat for testing
@@ -628,7 +629,6 @@ namespace text_adventure_game.Models
                             player.PrintStats();
                             sort = 3;
                             PrintWeapons();
-                            
                             BuyWeapons();
                             break;
                         default:
@@ -641,25 +641,25 @@ namespace text_adventure_game.Models
         public void PrintWeapons()
         {
             string type = string.Empty;
-            var Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            var StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
             if (sort == 1)
             {
                 type = "Sword";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
             else if (sort == 2)
             {
                 type = "Axe";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
             } 
             else if (sort == 3)
             {
                 type = "Mace";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
 
             int iD = 1;
-            foreach (Weapons weapon in Name)
+            foreach (Weapons weapon in StoreCopy)
             {
                 weapon.StoreID = iD;
                 Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
@@ -671,29 +671,29 @@ namespace text_adventure_game.Models
 
         public void BuyWeapons()
         {
+            int userChoice = 0;
+
             string type = string.Empty;
-            var Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            var SortedStore = Store.Where(m => m.Type == type);
             if (sort == 1)
             {
                 type = "Sword";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
             else if (sort == 2)
             {
                 type = "Axe";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
             else if (sort == 3)
             {
                 type = "Mace";
-                Name = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
             }
-            int userChoice = 0;
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in Name)
+                foreach (Weapons weapon in SortedStore)
                 {
-
                     if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
                     {
                         if (Inventory.Contains(weapon))
