@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace text_adventure_game.Models
 {
-    class Mace : Weapons
+    class Mace : Item
     {
         public Mace(string name, int goldValue, int lowDamageBoost, int highDamageBoost)
         {

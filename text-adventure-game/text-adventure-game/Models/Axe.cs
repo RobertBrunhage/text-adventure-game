@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace text_adventure_game.Models
 {
-    class Axe : Weapons
+    class Axe : Item
     {
         public Axe(string name, int goldValue, int lowDamageBoost, int highDamageBoost)
         {

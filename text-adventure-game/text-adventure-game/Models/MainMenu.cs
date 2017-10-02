@@ -9,16 +9,17 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        public int weaponID;
+        //public int weaponID;
+        //public int HelmetID;
         public bool run = false;
 
         public Player player = new Player();
         public Monster monster = new Monster();
-        public Weapons weapons = new Weapons();
+        public Item weapons = new Item();
 
-        public List<Weapons> Store { get; set; }
-        public List<Weapons> Inventory { get; set; }
-        public List<Weapons> EquipInventory { get; set; }
+        public List<Item> Store { get; set; }
+        public List<Item> Inventory { get; set; }
+        public List<Item> EquipInventory { get; set; }
 
         private string _mapName1 = "The glimting forest";
         private string _mapName2 = "The reversed forest";
@@ -31,11 +32,11 @@ namespace text_adventure_game.Models
 
         public MainMenu()
         {
-            Inventory = new List<Weapons>();
+            Inventory = new List<Item>();
 
-            EquipInventory = new List<Weapons>();
+            EquipInventory = new List<Item>();
 
-            Store = new List<Weapons>()
+            Store = new List<Item>()
             {
                 //Swords
                 new Sword("Vorpal Blade", 30, 1, 2),
@@ -50,7 +51,11 @@ namespace text_adventure_game.Models
                 //Maces
                 new Mace("Skull Smasher", 30, 1, 2),
                 new Mace("Blood Shedder", 100, 3, 4),
-                new Mace("Harvester", 700, 10, 20)
+                new Mace("Harvester", 700, 10, 20),
+
+                //Helmet
+                new Helmet("Helm of protection", 40, 1, 1, 1),
+                new Helmet("Helm of salvation", 60, 1, 1, 2)
             };
         }
 
@@ -75,7 +80,7 @@ namespace text_adventure_game.Models
                             player.AskName();
                             //player.AskAge();
                             Console.Clear();
-                            Introduction(); // Glöm inte speed på att den skriver ut
+                            //Introduction(); // Glöm inte speed på att den skriver ut
                             GameStart();
                             userChoice = 1;
                             break;
@@ -629,9 +634,13 @@ namespace text_adventure_game.Models
             int userChoice = 0;
             //WeaponType weaponType;
 
+            Console.WriteLine("Weapons: \n");
             Console.WriteLine("1. Swords");
             Console.WriteLine("2. Axes");
-            Console.WriteLine("3. Maces");
+            Console.WriteLine("3. Maces\n");
+
+            Console.WriteLine("Armour\n");
+            Console.WriteLine("4. Helmet");
 
             do
             {
@@ -660,42 +669,67 @@ namespace text_adventure_game.Models
                             PrintWeapons();
                             BuyWeapons();
                             break;
+                        case 4:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 4;
+                            PrintWeapons();
+                            BuyWeapons();
+                            break;
                         default:
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 3);
+            } while (userChoice < 1 || userChoice > 4);
         }
 
         public void PrintWeapons()
         {
             string type = string.Empty;
             var StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            if (sort == 1)
+            switch (sort)
             {
-                type = "Sword";
-                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            }
-            else if (sort == 2)
-            {
-                type = "Axe";
-                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            } 
-            else if (sort == 3)
-            {
-                type = "Mace";
-                StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            }
+                case 1:
+                    type = "Sword";
+                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 2:
+                    type = "Axe";
+                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 3:
+                    type = "Mace";
+                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 4:
+                    type = "Helmet";
+                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
 
+            }
             int iD = 1;
-            foreach (Weapons weapon in StoreCopy)
+
+            foreach (Item item in StoreCopy)
             {
-                weapon.StoreID = iD;
-                Console.WriteLine($"{weapon.StoreID}. {weapon.Name}");
-                Console.WriteLine($"Price: {weapon.GoldValue} gold");
-                Console.WriteLine($"Damage: {weapon.LowDamageBoost} - {weapon.HighDamageBoost} damage increase\n");
+                item.StoreID = iD;
+                Console.WriteLine($"{item.StoreID}. {item.Name}");
+                Console.WriteLine($"Price: {item.GoldValue} gold");
+                if (item.LowDamageBoost >= 1 && item.HighDamageBoost >= 1)
+                {
+                    Console.WriteLine($"Damage: {item.LowDamageBoost} - {item.HighDamageBoost} damage increase");
+                }
+                if (item.Armour > 0)
+                {
+                    Console.WriteLine($"Armour: {item.Armour}");
+                }
+                Console.WriteLine();
                 iD++;
             }
+            
         }
 
         public void BuyWeapons()
@@ -704,34 +738,43 @@ namespace text_adventure_game.Models
 
             string type = string.Empty;
             var SortedStore = Store.Where(m => m.Type == type);
-            if (sort == 1)
+            switch (sort)
             {
-                type = "Sword";
-                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            }
-            else if (sort == 2)
-            {
-                type = "Axe";
-                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
-            }
-            else if (sort == 3)
-            {
-                type = "Mace";
-                SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                case 1:
+                    type = "Sword";
+                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 2:
+                    type = "Axe";
+                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 3:
+                    type = "Mace";
+                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 4:
+                    type = "Helmet";
+                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 5:
+                    break;
+                default:
+                    break;
+
             }
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in SortedStore)
+                foreach (Item item in SortedStore)
                 {
-                    if (userChoice == weapon.StoreID && player.Gold >= weapon.GoldValue)
+                    if (userChoice == item.StoreID && player.Gold >= item.GoldValue)
                     {
-                        if (Inventory.Contains(weapon))
+                        if (Inventory.Contains(item))
                         {
                             Console.Clear();
                             Console.WriteLine("You already have this item in your inventory");
                             Console.ReadKey();
                         }
-                        else if (EquipInventory.Contains(weapon))
+                        else if (EquipInventory.Contains(item))
                         {
                             Console.Clear();
                             Console.WriteLine("You already have this item equipped");
@@ -739,14 +782,14 @@ namespace text_adventure_game.Models
                         }
                         else
                         {
-                            Inventory.Add(weapon);
-                            player.Gold -= weapon.GoldValue;
+                            Inventory.Add(item);
+                            player.Gold -= item.GoldValue;
                             Console.Clear();
-                            Console.WriteLine($"{weapon.Name} has been added to your inventory");
+                            Console.WriteLine($"{item.Name} has been added to your inventory");
                             Console.ReadKey();
                         }
                     }
-                    else if (userChoice == weapon.StoreID && player.Gold < weapon.GoldValue)
+                    else if (userChoice == item.StoreID && player.Gold < item.GoldValue)
                     {
                         Console.Clear();
                         Console.WriteLine("You do not have enough gold. You can get gold by defeating monsters in adventure");
@@ -768,55 +811,72 @@ namespace text_adventure_game.Models
             int userChoice = 0;
             int iD = 1;
             Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
-            foreach (Weapons weapon in sortedInventoryByName)
+            foreach (Item item in sortedInventoryByName)
             {
-                weapon.InventoryID = iD;
-                Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
-                Console.WriteLine($"stats: {weapon.LowDamageBoost} damage increase\n");
+                item.InventoryID = iD;
+                Console.WriteLine($"{item.InventoryID}. {item.Name}");
+                Console.WriteLine($"Price: {item.GoldValue} gold");
+                if (item.LowDamageBoost >= 1 && item.HighDamageBoost >= 1)
+                {
+                    Console.WriteLine($"Damage: {item.LowDamageBoost} - {item.HighDamageBoost} damage increase");
+                }
+                if(item.Armour > 0)
+                {
+                    Console.WriteLine($"Armour: {item.Armour}");
+                }
+                Console.WriteLine();
                 iD++;
             }
-            //loop through armour and write it out
             Console.WriteLine("Type number of item to equipp or press enter to search for item type\n");
             if(int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in Inventory)
+                foreach (Item item in Inventory)
                 {
-                    if (userChoice == weapon.InventoryID && weaponID == 0)
+                    if (userChoice == item.InventoryID)
                     {
-                        weaponID = weapon.SlotID;
-                        EquipInventory.Add(weapon);
-                        player.LowestDamage += weapon.LowDamageBoost;
-                        player.HigestDamage += weapon.HighDamageBoost;
-                        Inventory.Remove(weapon);
+                        //weaponID = item.SlotID;
+                        EquipInventory.Add(item);
+                        player.LowestDamage += item.LowDamageBoost;
+                        player.HigestDamage += item.HighDamageBoost;
+                        player.Armour += item.Armour;
+                        Inventory.Remove(item);
                         Console.Clear();
-                        Console.WriteLine($"{weapon.Name} has been equipped");
+                        Console.WriteLine($"{item.Name} has been equipped");
                         //Console.ReadKey();
                         break;
                     }
-                    else if(weaponID == 1)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("You already have a weapon equipped. Enter Equipped items to remove it");
-                        Console.ReadKey();
-                    }
+                    //else if(weaponID == 1)
+                    //{
+                    //    Console.Clear();
+                    //    Console.WriteLine("You already have a weapon equipped. Enter Equipped items to remove it");
+                    //    Console.ReadKey();
+                    //}
                 }
                 //Loop through armour and equip etc
             }
             else
             {
                 iD = 1;
-                Console.WriteLine("Search for a weapon / armour type you would like to find. Ex Sword");
+                Console.WriteLine("Search for a weapon / armour type you would like to find. Ex Sword or Helmet");
                 string type = Console.ReadLine();
                 var Name = Inventory.Where(m => m.Type.ToLower() == type.ToLower());
                 Console.Clear();
                 player.PrintStats();
                 if (Name.Any())
                 {
-                    foreach (Weapons weapon in Name)
+                    foreach (Item item in Name)
                     {
-                        weapon.InventoryID = iD;
-                        Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
-                        Console.WriteLine($"stats: {weapon.LowDamageBoost} damage increase\n");
+                        item.InventoryID = iD;
+                        Console.WriteLine($"{item.StoreID}. {item.Name}");
+                        Console.WriteLine($"Price: {item.GoldValue} gold");
+                        if (item.LowDamageBoost >= 1 && item.HighDamageBoost >= 1)
+                        {
+                            Console.WriteLine($"Damage: {item.LowDamageBoost} - {item.HighDamageBoost} damage increase");
+                        }
+                        if (item.Armour > 0)
+                        {
+                            Console.WriteLine($"Armour: {item.Armour}\n");
+                        }
                         iD++;
                     }
                 }
@@ -824,26 +884,26 @@ namespace text_adventure_game.Models
 
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in Inventory)
+                foreach (Item item in Inventory)
                 {
-                    if (userChoice == weapon.InventoryID && weaponID == 0)
+                    if (userChoice == item.InventoryID)
                     {
-                        weaponID = weapon.SlotID;
-                        EquipInventory.Add(weapon);
-                        player.LowestDamage += weapon.LowDamageBoost;
-                        player.HigestDamage += weapon.HighDamageBoost;
-                        Inventory.Remove(weapon);
+                        //weaponID = item.SlotID;
+                        EquipInventory.Add(item);
+                        player.LowestDamage += item.LowDamageBoost;
+                        player.HigestDamage += item.HighDamageBoost;
+                        Inventory.Remove(item);
                         Console.Clear();
-                        Console.WriteLine($"{weapon.Name} has been equipped");
+                        Console.WriteLine($"{item.Name} has been equipped");
                         Console.ReadKey();
                         break;
                     }
-                    else if (weaponID == 1)
-                    {
-                        Console.Clear();
-                        Console.WriteLine("You already have a weapon equipped. Enter Equipped items to remove it");
-                        Console.ReadKey();
-                    }
+                    //else if (weaponID == 1)
+                    //{
+                    //    Console.Clear();
+                    //    Console.WriteLine($"You already have a weapon equipped. Enter Equipped items to remove it");
+                    //    Console.ReadKey();
+                    //}
                 }
                 //Loop through armour and equip etc
             }
@@ -855,33 +915,31 @@ namespace text_adventure_game.Models
             int userChoice = 0;
             int iD = 1;
             Console.WriteLine("Inventory         To unequip an item press the key that correspons with the item\n");
-            foreach (Weapons weapon in sortedInventoryByName)
+            foreach (Item weapon in sortedInventoryByName)
             {
                 weapon.InventoryID = iD;
                 Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
                 Console.WriteLine($"stats: {weapon.LowDamageBoost} damage increase\n");
                 iD++;
             }
-            //loop through armour and write it out
             Console.WriteLine("Type number of item to unequipp or press enter to search for item type\n");
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in EquipInventory)
+                foreach (Item item in EquipInventory)
                 {
-                    if (userChoice == weapon.InventoryID)
+                    if (userChoice == item.InventoryID)
                     {
-                        weaponID = 0;
-                        EquipInventory.Remove(weapon);
-                        player.LowestDamage -= weapon.LowDamageBoost;
-                        player.HigestDamage -= weapon.HighDamageBoost;
-                        Inventory.Add(weapon);
+                        //weaponID = 0;
+                        EquipInventory.Remove(item);
+                        player.LowestDamage -= item.LowDamageBoost;
+                        player.HigestDamage -= item.HighDamageBoost;
+                        player.Armour -= item.Armour;
+                        Inventory.Add(item);
                         Console.Clear();
-                        Console.WriteLine($"{weapon.Name} has been unequipped");
-                        //Console.ReadKey();
+                        Console.WriteLine($"{item.Name} has been unequipped");
                         break;
                     }
                 }
-                //Loop through armour and equip etc
             }
             else
             {
@@ -893,7 +951,7 @@ namespace text_adventure_game.Models
                 player.PrintStats();
                 if (Name.Any())
                 {
-                    foreach (Weapons weapon in Name)
+                    foreach (Item weapon in Name)
                     {
                         weapon.InventoryID = iD;
                         Console.WriteLine($"{weapon.InventoryID}. {weapon.Name}");
@@ -905,11 +963,11 @@ namespace text_adventure_game.Models
 
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Weapons weapon in EquipInventory)
+                foreach (Item weapon in EquipInventory)
                 {
                     if (userChoice == weapon.InventoryID)
                     {
-                        weaponID = 0;
+                        //weaponID = 0;
                         EquipInventory.Remove(weapon);
                         player.LowestDamage -= weapon.LowDamageBoost;
                         player.HigestDamage -= weapon.HighDamageBoost;
