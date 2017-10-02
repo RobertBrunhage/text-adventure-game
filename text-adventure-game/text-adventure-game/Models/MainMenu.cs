@@ -9,8 +9,9 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        //public int weaponID;
-        //public int HelmetID;
+        public int weaponID;
+        public int HelmetID;
+
         public bool run = false;
 
         public Player player = new Player();
@@ -652,29 +653,29 @@ namespace text_adventure_game.Models
                             Console.Clear();
                             player.PrintStats();
                             sort = 1;
-                            PrintWeapons();
-                            BuyWeapons();
+                            PrintItems();
+                            BuyItems();
                             break;
                         case 2:
                             Console.Clear();
                             player.PrintStats();
                             sort = 2;
-                            PrintWeapons();
-                            BuyWeapons();
+                            PrintItems();
+                            BuyItems();
                             break;
                         case 3:
                             Console.Clear();
                             player.PrintStats();
                             sort = 3;
-                            PrintWeapons();
-                            BuyWeapons();
+                            PrintItems();
+                            BuyItems();
                             break;
                         case 4:
                             Console.Clear();
                             player.PrintStats();
                             sort = 4;
-                            PrintWeapons();
-                            BuyWeapons();
+                            PrintItems();
+                            BuyItems();
                             break;
                         default:
                             break;
@@ -683,7 +684,7 @@ namespace text_adventure_game.Models
             } while (userChoice < 1 || userChoice > 4);
         }
 
-        public void PrintWeapons()
+        public void PrintItems()
         {
             string type = string.Empty;
             var StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
@@ -732,7 +733,7 @@ namespace text_adventure_game.Models
             
         }
 
-        public void BuyWeapons()
+        public void BuyItems()
         {
             int userChoice = 0;
 
@@ -811,7 +812,7 @@ namespace text_adventure_game.Models
             int userChoice = 0;
             int iD = 1;
             Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
-            foreach (Item item in sortedInventoryByName)
+            foreach (Item item in sortedInventoryByName) //Print out all the items in the inventory
             {
                 item.InventoryID = iD;
                 Console.WriteLine($"{item.InventoryID}. {item.Name}");
@@ -827,14 +828,28 @@ namespace text_adventure_game.Models
                 Console.WriteLine();
                 iD++;
             }
-            Console.WriteLine("Type number of item to equipp or press enter to search for item type\n");
-            if(int.TryParse(Console.ReadLine(), out userChoice))
+
+            Console.WriteLine("Type number of item to equip or press enter to search for item type\n");
+            if(int.TryParse(Console.ReadLine(), out userChoice)) //If I pick an item add it to equipInventory and add stats
             {
                 foreach (Item item in Inventory)
                 {
                     if (userChoice == item.InventoryID)
                     {
-                        //weaponID = item.SlotID;
+                        if(item.BaseType == "Weapon" && weaponID == 0)
+                        {
+                            weaponID = 1;
+                        }
+                        else if(item.BaseType == "Helmet" && HelmetID == 0)
+                        {
+                            HelmetID = 1;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"You already have a {item.BaseType} equipped");
+                            break;
+                        }
                         EquipInventory.Add(item);
                         player.LowestDamage += item.LowDamageBoost;
                         player.HigestDamage += item.HighDamageBoost;
@@ -842,19 +857,11 @@ namespace text_adventure_game.Models
                         Inventory.Remove(item);
                         Console.Clear();
                         Console.WriteLine($"{item.Name} has been equipped");
-                        //Console.ReadKey();
                         break;
                     }
-                    //else if(weaponID == 1)
-                    //{
-                    //    Console.Clear();
-                    //    Console.WriteLine("You already have a weapon equipped. Enter Equipped items to remove it");
-                    //    Console.ReadKey();
-                    //}
                 }
-                //Loop through armour and equip etc
             }
-            else
+            else // If I do not pick a number a search function comes up
             {
                 iD = 1;
                 Console.WriteLine("Search for a weapon / armour type you would like to find. Ex Sword or Helmet");
@@ -881,14 +888,26 @@ namespace text_adventure_game.Models
                     }
                 }
             }
-
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
                 foreach (Item item in Inventory)
                 {
                     if (userChoice == item.InventoryID)
                     {
-                        //weaponID = item.SlotID;
+                        if (item.BaseType == "Weapon" && weaponID == 1)
+                        {
+                            weaponID = 0;
+                        }
+                        else if (item.BaseType == "Helmet" && HelmetID == 1)
+                        {
+                            HelmetID = 0;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"lol");
+                            break;
+                        }
                         EquipInventory.Add(item);
                         player.LowestDamage += item.LowDamageBoost;
                         player.HigestDamage += item.HighDamageBoost;
@@ -898,14 +917,7 @@ namespace text_adventure_game.Models
                         Console.ReadKey();
                         break;
                     }
-                    //else if (weaponID == 1)
-                    //{
-                    //    Console.Clear();
-                    //    Console.WriteLine($"You already have a weapon equipped. Enter Equipped items to remove it");
-                    //    Console.ReadKey();
-                    //}
                 }
-                //Loop through armour and equip etc
             }
         }
 
@@ -929,7 +941,20 @@ namespace text_adventure_game.Models
                 {
                     if (userChoice == item.InventoryID)
                     {
-                        //weaponID = 0;
+                        if (item.BaseType == "Weapon" && weaponID == 1)
+                        {
+                            weaponID = 0;
+                        }
+                        else if (item.BaseType == "Helmet" && HelmetID == 1)
+                        {
+                            HelmetID = 0;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"lol");
+                            break;
+                        }
                         EquipInventory.Remove(item);
                         player.LowestDamage -= item.LowDamageBoost;
                         player.HigestDamage -= item.HighDamageBoost;
@@ -963,22 +988,34 @@ namespace text_adventure_game.Models
 
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
-                foreach (Item weapon in EquipInventory)
+                foreach (Item item in EquipInventory)
                 {
-                    if (userChoice == weapon.InventoryID)
+                    if (userChoice == item.InventoryID)
                     {
-                        //weaponID = 0;
-                        EquipInventory.Remove(weapon);
-                        player.LowestDamage -= weapon.LowDamageBoost;
-                        player.HigestDamage -= weapon.HighDamageBoost;
-                        Inventory.Add(weapon);
+                        if (item.BaseType == "Weapon" && weaponID == 0)
+                        {
+                            weaponID = 1;
+                        }
+                        else if (item.BaseType == "Helmet" && HelmetID == 0)
+                        {
+                            HelmetID = 1;
+                        }
+                        else
+                        {
+                            Console.Clear();
+                            Console.WriteLine($"lol");
+                            break;
+                        }
+                        EquipInventory.Remove(item);
+                        player.LowestDamage -= item.LowDamageBoost;
+                        player.HigestDamage -= item.HighDamageBoost;
+                        Inventory.Add(item);
                         Console.Clear();
-                        Console.WriteLine($"{weapon.Name} has been unequipped");
+                        Console.WriteLine($"{item.Name} has been unequipped");
                         Console.ReadKey();
                         break;
                     }
                 }
-                //Loop through armour and equip etc
             }
         }
     }

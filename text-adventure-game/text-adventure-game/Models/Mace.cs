@@ -17,6 +17,7 @@ namespace text_adventure_game.Models
             base.StoreID = 0;
             base.SlotID = 1;
             base.Type = "Mace";
+            base.BaseType = "Weapon";
         }
     }
 }

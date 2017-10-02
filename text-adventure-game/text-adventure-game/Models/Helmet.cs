@@ -15,9 +15,10 @@ namespace text_adventure_game.Models
             base.LowDamageBoost = lowDamageBoost;
             base.HighDamageBoost = highDamageBoost;
             base.StoreID = 0;
-            base.SlotID = 1;
+            base.SlotID = 2;
             base.Armour = armour;
             base.Type = "Helmet";
+            base.BaseType = "Helmet";
         }
     }
 }
