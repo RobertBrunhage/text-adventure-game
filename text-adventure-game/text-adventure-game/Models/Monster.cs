@@ -14,6 +14,7 @@ namespace text_adventure_game.Models
             Monster2,
             Monster3,
             Monster4,
+            Monster5,
             Boss
         };
 
@@ -56,8 +57,28 @@ namespace text_adventure_game.Models
                     Name = "Bear";
                     break;
                 case Monsters.Monster4:
+                    Health = 55;
+                    MinGold = 25;
+                    MaxGold = 35;
+                    MinDamage = 7;
+                    MaxDamage = 12;
+                    Name = "Lion";
+                    break;
+                case Monsters.Monster5:
+                    Health = 65;
+                    MinGold = 30;
+                    MaxGold = 40;
+                    MinDamage = 9;
+                    MaxDamage = 14;
+                    Name = "Crocodile";
                     break;
                 case Monsters.Boss:
+                    Health = 100;
+                    MinGold = 90;
+                    MaxGold = 200;
+                    MinDamage = 16;
+                    MaxDamage = 30;
+                    Name = "Dragon of Doom";
                     break;
                 default:
                     break;
@@ -68,6 +89,7 @@ namespace text_adventure_game.Models
         {
             Console.WriteLine($"monster name: {Name}");
             Console.WriteLine($"monster health: {Health}");
+            Console.WriteLine($"Monster damage: {MinDamage} - {MaxDamage}");
         }
     }
 }

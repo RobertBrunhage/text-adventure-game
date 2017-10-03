@@ -11,6 +11,7 @@ namespace text_adventure_game.Models
     {
         public int weaponID;
         public int HelmetID;
+        public int ChestplateID;
 
         public bool run = false;
 
@@ -25,8 +26,7 @@ namespace text_adventure_game.Models
         private string _mapName1 = "The glimting forest";
         private string _mapName2 = "The reversed forest";
         private string _mapName3 = "the black forest";
-        private string _mapName4 = "Map 4";
-        private string _mapName5 = "Map 5";
+        private string _mapName4 = "The mysterious castle";
         private int sort = 0; // Print and buy method will use this variable
         private int mapComplete = 0;
         private bool gameOn = true;
@@ -56,7 +56,10 @@ namespace text_adventure_game.Models
 
                 //Helmet
                 new Helmet("Helm of protection", 40, 1, 1, 1, 10),
-                new Helmet("Helm of salvation", 60, 1, 1, 2, 15)
+                new Helmet("Helm of salvation", 60, 1, 1, 2, 15),
+
+                //Chestplate
+                new Chestplate("Chest lel", 80, 1, 2, 10, 10)
             };
         }
 
@@ -78,8 +81,8 @@ namespace text_adventure_game.Models
                         case 1:
                             player.AskGender();
                             player.AskClass();
+                            player.AskAge();
                             player.AskName();
-                            //player.AskAge();
                             Console.Clear();
                             //Introduction(); // Glöm inte speed på att den skriver ut
                             GameStart();
@@ -184,9 +187,10 @@ namespace text_adventure_game.Models
         {
             Console.Clear();
             player.PrintStats();
-            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP. This will take about 10 sec. Please wait...");
+            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP and Armour. This will take about 10 sec. Please wait...");
             Thread.Sleep(10000);
             player.Health = player.MaxHealth;
+            player.Armour = player.MaxArmour;
         }
 
         public void AskAdventure()
@@ -200,8 +204,7 @@ namespace text_adventure_game.Models
                 Console.WriteLine($"2. {_mapName2}");
                 Console.WriteLine($"3. {_mapName3}");
                 Console.WriteLine($"4. {_mapName4}");
-                Console.WriteLine($"5. {_mapName5}");
-                Console.WriteLine($"6. Go back to menu");
+                Console.WriteLine($"5. Go back to menu");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -227,13 +230,14 @@ namespace text_adventure_game.Models
                             //Map3();
                             break;
                         case 4:
-                            //Map 4
+                            if(mapComplete >= 3)
+                            {
+                                Map4();
+                            }
+                            //Map4();
                             break;
                         case 5:
-                            //Boss Map
-                            break;
-                        case 6:
-                            // Returning to menu
+                            //returning to menu
                             break;
                         default:
                             Console.Clear();
@@ -242,7 +246,7 @@ namespace text_adventure_game.Models
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 6);
+            } while (userChoice < 1 || userChoice > 5);
             Console.Clear();
         }
 
@@ -300,6 +304,7 @@ namespace text_adventure_game.Models
 
                                             Console.ReadKey();
                                             Console.Clear();
+                                            Console.ResetColor();
                                             player.PrintStats();
 
                                             Console.WriteLine("1. Adventure");
@@ -314,13 +319,15 @@ namespace text_adventure_game.Models
                                             }
                                             Console.ReadKey();
                                         }
-                                        Console.ResetColor();
                                         // Returning to menu
+                                        if(mapComplete == 0)
+                                        {
+                                            mapComplete++;
+                                            Console.Clear();
+                                            Console.WriteLine($"You unlocked {_mapName2} and found the first key!");
+                                            Console.ReadKey();
+                                        }
 
-                                        mapComplete++;
-                                        Console.Clear();
-                                        Console.WriteLine($"You unlocked {_mapName2}");
-                                        Console.ReadKey();
                                     }
                                     else if (userChoice == 2)
                                     {
@@ -337,10 +344,12 @@ namespace text_adventure_game.Models
                     }
                 }
             } while ((userChoice < 1 || userChoice > 2));
+            Console.ResetColor();
         }
 
         public void Map2()
         {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             int userChoice = 0;
 
             string text;
@@ -360,6 +369,7 @@ namespace text_adventure_game.Models
                         case 1:
                             monster.MonsterDif = 1;
                             monster.ChooseMonster();
+                            Console.ForegroundColor = ConsoleColor.DarkGreen;
                             Console.WriteLine("What is that...? You can't be serious???");
                             Console.ReadKey();
                             Console.WriteLine($"A {monster.Name} has appeared...But this is a darker dark forest.");
@@ -369,6 +379,7 @@ namespace text_adventure_game.Models
                             CombatMonster();
                             if(monster.Health <= 0)
                             {
+                                Console.ResetColor();
                                 Console.Clear();
                                 player.PrintStats();
 
@@ -426,12 +437,15 @@ namespace text_adventure_game.Models
                                                 Thread.Sleep(30);
                                             }
                                             Console.ReadKey();
+                                            if(mapComplete == 1)
+                                            {
+                                                mapComplete++;
+                                                Console.Clear();
+                                                Console.WriteLine($"You unlocked {_mapName3} and found the second key!");
+                                                Console.ReadKey();
+                                            }
                                         }
                                         // Returning to menu
-                                        mapComplete++;
-                                        Console.Clear();
-                                        Console.WriteLine($"You unlocked {_mapName3}");
-                                        Console.ReadKey();
                                     }
                                     else if (userChoice == 2)
                                     {
@@ -447,10 +461,12 @@ namespace text_adventure_game.Models
                     }
                 }
             } while ((userChoice < 1 || userChoice > 2));
+            Console.ResetColor();
         }
 
         public void Map3()
         {
+            Console.ForegroundColor = ConsoleColor.Magenta;
             int userChoice = 0;
             monster.MonsterDif = 3;
             monster.ChooseMonster();
@@ -487,6 +503,7 @@ namespace text_adventure_game.Models
                                         Console.ReadKey();
 
                                         CombatMonster();
+                                        Console.ForegroundColor = ConsoleColor.Magenta;
                                         if (monster.Health <= 0)
                                         {
                                             text = $"You slayed the {monster.Name} though this was a magical bear you got teleported back to town...";
@@ -496,7 +513,13 @@ namespace text_adventure_game.Models
                                                 Thread.Sleep(30);
                                             }
                                             Console.ReadKey();
-                                            mapComplete++;
+                                            if(mapComplete == 2)
+                                            {
+                                                mapComplete++;
+                                                Console.Clear();
+                                                Console.WriteLine($"You have completed {_mapName3} and found the last key!");
+                                            }
+
                                         }
                                     }
                                     else if (userChoice == 2)
@@ -505,17 +528,13 @@ namespace text_adventure_game.Models
                                         Console.WriteLine($"You jumped over the whole but there was a {monster.Name} running towards you!");
                                         Console.ReadKey();
                                         CombatMonster();
-                                        if(monster.Health <= 0)
+                                        Console.ForegroundColor = ConsoleColor.Magenta;
+                                        if (monster.Health <= 0)
                                         {
-                                            Console.WriteLine($"After the fight with the {monster.Name} you see another portal and as you head through it you come back to town...");
+                                            Console.WriteLine($"After the fight with the {monster.Name} you see another portal and as you head through it you come back to town...No key here");
 
                                             Console.ReadKey();
                                         }
-                                        // Returning to menu
-                                        //mapComplete++;
-                                        //Console.Clear();
-                                        //Console.WriteLine($"You unlocked {_mapName3}");
-                                        //Console.ReadKey();
                                     }
                                     break;
                                 }
@@ -529,7 +548,8 @@ namespace text_adventure_game.Models
                             Console.Clear();
 
                             CombatMonster();
-                            if(run == false)
+                            Console.ResetColor();
+                            if (run == false && player.Health > 0)
                             {
                                 Console.Clear();
                                 player.PrintStats();
@@ -538,7 +558,7 @@ namespace text_adventure_game.Models
                                 Console.WriteLine("2. Inventory");
                                 Console.WriteLine("3. Store");
                                 Console.WriteLine("4. Tavern");
-                                text = "\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop";
+                                text = "\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop. But srsly no key";
                                 foreach (char c in text)
                                 {
                                     Console.Write(c);
@@ -553,6 +573,100 @@ namespace text_adventure_game.Models
                     }
                 }
             } while ((userChoice < 1 || userChoice > 2));
+            Console.ResetColor();
+        }
+
+        public void Map4()
+        {
+            //Console.ForegroundColor = ConsoleColor.Magenta;
+            int userChoice = 0;
+            monster.MonsterDif = 4;
+            monster.ChooseMonster();
+
+            Console.Clear();
+            player.PrintStats();
+            Console.WriteLine($"You have entered the {_mapName4}. Now you can finally understand what the keys you have gathered are supposed to do! You see a huge castle with a big door. On the door there are 3 key holes..." +
+                $" Do you want to try to slam your way in or use the keys?\n");
+            Console.WriteLine("1. Use the keys");
+            Console.WriteLine("2. Slam the door");
+            do
+            {
+                if (int.TryParse(Console.ReadLine(), out userChoice))
+                {
+                    switch (userChoice)
+                    {
+                        case 1:
+                            
+                            monster.MonsterDif = 4;
+                            monster.ChooseMonster();
+                            Console.Clear();
+                            player.PrintStats();
+                            Console.WriteLine($"As the door opens a {monster.Name} appears!");
+                            Console.ReadKey();
+                            CombatMonster();
+
+                            monster.MonsterDif = 5;
+                            monster.ChooseMonster();
+                            Console.WriteLine($"You are fatigued but you keep going forward and then up the long staircase...There is a another big door but a strong {monster.Name} defends it you run towards it to attack!");
+                            Console.ReadKey();
+                            CombatMonster();
+                            if(run == false && player.Health > 0)
+                            {
+                                Console.WriteLine($"Now there is no going back... You go forward to the door and opened it! It's the monster from {_mapName1} that were chasing you! You can see that it guards something... " +
+                                $"the monster saw you and runs towards you!");
+                                Console.ReadKey();
+                                monster.MonsterDif = 6;
+                                monster.ChooseMonster();
+                                CombatMonster();
+                            }
+                            
+                            if(run == false && player.Health > 0)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Bajs berättelse om hur man vann och vad vi fick för coolt eller nått");
+                            }
+
+                            break;
+                        case 2:
+                            Random rndMonster = new Random();
+                            Console.Clear();
+                            Console.WriteLine("You try to slam the door but it only atracts low level monster from around the castle...Be prepered!");
+                            Console.ReadKey();
+                            monster.MonsterDif = rndMonster.Next(1, 4);
+                            monster.ChooseMonster();
+                            CombatMonster();
+                             
+                            while (run == false && player.Health > 0)
+                            {
+                                monster.MonsterDif = rndMonster.Next(1, 4);
+                                monster.ChooseMonster();
+                                Console.Clear();
+                                switch (monster.MonsterDif)
+                                {
+                                    case 1:
+                                        Console.WriteLine("It's more coming!!!");
+                                        Console.ReadKey();
+                                        break;
+                                    case 2:
+                                        Console.WriteLine("It just keeps coming more");
+                                        Console.ReadKey();
+                                        break;
+                                    case 3:
+                                        Console.WriteLine("This one is pretty strong");
+                                        Console.ReadKey();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                CombatMonster();
+                            }
+
+                            run = false;
+                            break;
+                    }
+                }
+            } while ((userChoice < 1 || userChoice > 2));
+            Console.ResetColor();
         }
 
         void CombatMonster()
@@ -590,12 +704,29 @@ namespace text_adventure_game.Models
 
                             monster.Health -= playerDamage;
                             Console.WriteLine($"\nYou did {playerDamage} damage on the monster");
-                            player.Health -= monsterDamage;
+                            if(player.Armour > 0)
+                            {
+                                player.Armour -= monsterDamage;
+                            }
+                            
+                            if(player.Armour <= 0)
+                            {
+                                player.Armour = 0;
+                                player.Health -= monsterDamage;
+                            }
                             Console.WriteLine($"The monster did {monsterDamage} damage on you");
                             Console.ReadKey();
                             break;
                         case 2:
-                            run = true;
+                            if(player.HigestDamage > monster.MaxDamage)
+                            {
+                                run = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine($"You can't run from {monster.Name} you need more damage");
+                                Console.ReadKey();
+                            }
                             break;
                         default:
                             break;
@@ -621,7 +752,7 @@ namespace text_adventure_game.Models
                 Console.Clear();
                 // Returning to menu
             }
-            else if (userChoice == 2)
+            else if (run == true)
             {
                 Console.WriteLine("You will now be returned to the menu");
                 Console.ReadKey();
@@ -633,7 +764,6 @@ namespace text_adventure_game.Models
         public void ItemStore()
         {
             int userChoice = 0;
-            //WeaponType weaponType;
 
             Console.WriteLine("Weapons: \n");
             Console.WriteLine("1. Swords");
@@ -642,8 +772,9 @@ namespace text_adventure_game.Models
 
             Console.WriteLine("Armour\n");
             Console.WriteLine("4. Helmet");
+            Console.WriteLine("5. Checkplate");
 
-            do
+            while(userChoice < 1 || userChoice > 5)
             {
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -677,11 +808,18 @@ namespace text_adventure_game.Models
                             PrintItems();
                             BuyItems();
                             break;
+                        case 5:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 5;
+                            PrintItems();
+                            BuyItems();
+                            break;
                         default:
                             break;
                     }
                 }
-            } while (userChoice < 1 || userChoice > 4);
+            }
         }
 
         public void PrintItems()
@@ -707,6 +845,8 @@ namespace text_adventure_game.Models
                     StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 case 5:
+                    type = "Chestplate";
+                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 default:
                     break;
@@ -762,6 +902,8 @@ namespace text_adventure_game.Models
                     SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 case 5:
+                    type = "Chestplate";
+                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 default:
                     break;
@@ -852,6 +994,10 @@ namespace text_adventure_game.Models
                         {
                             HelmetID = 1;
                         }
+                        else if(item.SlotID == 3 && HelmetID == 0)
+                        {
+                            ChestplateID = 1;
+                        }
                         else
                         {
                             Console.Clear();
@@ -862,7 +1008,7 @@ namespace text_adventure_game.Models
                         EquipInventory.Add(item);
                         player.LowestDamage += item.LowDamageBoost;
                         player.HigestDamage += item.HighDamageBoost;
-                        player.Armour += item.Armour;
+                        player.MaxArmour += item.Armour;
                         player.MaxHealth += item.HealthIncrease;
                         Inventory.Remove(item);
                         Console.Clear();
@@ -916,10 +1062,14 @@ namespace text_adventure_game.Models
                         {
                             HelmetID = 0;
                         }
+                        else if (item.SlotID == 3 && HelmetID == 1)
+                        {
+                            ChestplateID = 0;
+                        }
                         EquipInventory.Remove(item);
                         player.LowestDamage -= item.LowDamageBoost;
                         player.HigestDamage -= item.HighDamageBoost;
-                        player.Armour -= item.Armour;
+                        player.MaxArmour -= item.Armour;
                         player.MaxHealth -= item.HealthIncrease;
                         Inventory.Add(item);
                         Console.Clear();
@@ -932,4 +1082,8 @@ namespace text_adventure_game.Models
         }
     }
 }
+//Soundtrack for the game
+//Staff
+//3 more defensive items
+//Msuic for each zone sound effect when battling
 

@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\Axe.cs" />
+    <Compile Include="Models\Chestplate.cs" />
     <Compile Include="Models\Helmet.cs" />
     <Compile Include="Models\IItem.cs" />
     <Compile Include="Models\Mace.cs" />
