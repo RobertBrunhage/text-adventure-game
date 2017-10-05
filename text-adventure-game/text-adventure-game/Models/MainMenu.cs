@@ -43,27 +43,32 @@ namespace text_adventure_game.Models
             Store = new List<Item>()
             {
                 //Swords
-                new Sword("Vorpal Blade", 30, 1, 2),
-                new Sword("Dragon Slayer", 70, 2, 3),
-                new Sword("Sword of Judgment", 120, 2, 4),
+                new Sword("Vorpal Blade", 5, 2, 2),
+                new Sword("Dragon Slayer", 25, 4, 4),
+                new Sword("Sword of Judgment", 70, 7, 7),
 
                 //Axes
-                new Axe("Blight's Plight", 50, 2, 2),
-                new Axe("The Grim Cleaver", 90, 2, 4),
-                new Axe("Harbringer of Death", 150, 3, 5),
+                new Axe("Blight's Plight", 10, 2, 3),
+                new Axe("The Grim Cleaver", 75, 7, 8),
+                new Axe("Harbringer of Death", 150, 9, 16),
 
                 //Maces
-                new Mace("Skull Smasher", 30, 1, 2),
-                new Mace("Blood Shedder", 100, 3, 4),
+                new Mace("Skull Smasher", 15, 3, 3),
+                new Mace("Blood Shedder", 35, 5, 5),
                 new Mace("Harvester", 700, 10, 20),
 
                 //Helmet
-                new Helmet("Helm of protection", 40, 1, 1, 1, 10),
-                new Helmet("Helm of salvation", 60, 1, 1, 2, 15),
+                new Helmet("Helm of protection", 40, 1, 1, 10, 10),
+                new Helmet("Helm of salvation", 60, 2, 2, 40, 25),
 
                 //Chestplate
+<<<<<<< HEAD
                 new Chestplate("Chest of survival", 80, 1, 2, 10, 10),
                 new Chestplate("Chest of doom", 100, 2, 2, 15, 15)
+=======
+                new Chestplate("Chest lel", 20, 1, 2, 20, 10),
+                new Chestplate("Chest Lel2", 40, 2, 2, 30, 20)
+>>>>>>> 31350f9cf6604e24aa9399d05c03d3820c008397
             };
         }
 
@@ -88,7 +93,7 @@ namespace text_adventure_game.Models
                             player.AskAge();
                             player.AskName();
                             Console.Clear();
-                            //Introduction(); // Glöm inte speed på att den skriver ut
+                            Introduction(); // Glöm inte speed på att den skriver ut
                             GameStart();
                             break;
                         case 2:
@@ -238,7 +243,7 @@ namespace text_adventure_game.Models
                             {
                                 Map4();
                             }
-                            //Map4();
+                            Map4();
                             break;
                         case 5:
                             //returning to menu
@@ -608,12 +613,15 @@ namespace text_adventure_game.Models
                             Console.WriteLine($"As the door opens a {monster.Name} appears!");
                             Console.ReadKey();
                             CombatMonster();
-
-                            monster.MonsterDif = 5;
-                            monster.ChooseMonster();
-                            Console.WriteLine($"You are fatigued but you keep going forward and then up the long staircase...There is a another big door but a strong {monster.Name} defends it you run towards it to attack!");
-                            Console.ReadKey();
-                            CombatMonster();
+                            if(run == false && player.Health > 0)
+                            {
+                                monster.MonsterDif = 5;
+                                monster.ChooseMonster();
+                                Console.WriteLine($"You are fatigued but you keep going forward and then up the long staircase...There is a another big door but a strong {monster.Name} defends it you run towards it to attack!");
+                                Console.ReadKey();
+                                CombatMonster();
+                            }
+                           
                             if(run == false && player.Health > 0)
                             {
                                 Console.WriteLine($"Now there is no going back... You go forward to the door and opened it! It's the monster from {_mapName1} that were chasing you! You can see that it guards something... " +
@@ -624,10 +632,19 @@ namespace text_adventure_game.Models
                                 CombatMonster();
                             }
                             
-                            if(run == false && player.Health > 0)
+                            if(run == false && monster.Health <= 0)
                             {
                                 Console.Clear();
-                                Console.WriteLine("Bajs berättelse om hur man vann och vad vi fick för coolt eller nått");
+                                Console.WriteLine($"Hey it's me again...the creater...\n " +
+                                    $"Pretty cool that you actually defeated {monster.Name}. The dragon defended a great treasure and that is the treasure of " +
+                                    $"Sucess! You may now feel awesome and cool because you have defeated the danger that once was here. Thanks for playing the game the world is now at peace");
+                                Console.ReadKey();
+                            }
+                            if(player.Health <= 0)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Wow you actually killed each other though.. Pretty rare. Happily for you I can revive you, cya at the tavern!");
+                                Console.ReadKey();
                             }
 
                             break;
@@ -748,7 +765,7 @@ namespace text_adventure_game.Models
                 Console.ReadKey();
                 Console.Clear();
             }
-            else if (player.Health <= 0)
+            if (player.Health <= 0)
             {
                 Console.WriteLine("You have died");
                 player.Health = 0;
