@@ -10,14 +10,15 @@ namespace text_adventure_game.Models
     class MainMenu
     {
         //Used to see what items are equipped
-        private int equippedWeapon; //item.slot1
-        private int equippedHelmet; //item.slot2
-        private int equippedChest; //item.slot3
-        private int equippedPants; //item.slot4
-        private int equippedGloves; //item.slot5
+        private int equippedWeapon;
+        private int equippedHelmet;
+        private int equippedChest;
+        private int equippedPants;
+        private int equippedGloves;
 
         //Prints different text in adventure 
-        public bool run = false;
+        private bool run = false;
+        private bool bossDefeated = false;
 
         public Player player = new Player();
         public Monster monster = new Monster();
@@ -26,7 +27,6 @@ namespace text_adventure_game.Models
         public List<Item> Store { get; set; }
         public List<Item> Inventory { get; set; }
         public List<Item> EquipInventory { get; set; }
-        //public Item[] EquipInventoryArray;
 
         //Name of adventure maps
         private string _mapName1 = "The glimting forest";
@@ -42,8 +42,6 @@ namespace text_adventure_game.Models
             Inventory = new List<Item>();
 
             EquipInventory = new List<Item>();
-
-            //EquipInventoryArray = new Item[3];
 
             Store = new List<Item>()
             {
@@ -102,7 +100,7 @@ namespace text_adventure_game.Models
                             player.AskAge();
                             player.AskName();
                             Console.Clear();
-                            Introduction(); // Glöm inte speed på att den skriver ut
+                            Introduction();
                             GameStart();
                             break;
                         case 2:
@@ -119,11 +117,7 @@ namespace text_adventure_game.Models
             //Introduction
             Console.WriteLine($"Welcome to the world of Adventure of Pixel's. In this world there is all kinds of magical and explorious adventures. " +
                 $"You as a {player.Class} will now be guided by the creator (me....IT's A ME....MARIO) all jokes aside let us begin your adventure, {player.Name}. \n");
-            //foreach (char c in text)
-            //{
-            //    Console.Write(c);
-            //    Thread.Sleep(10);
-            //}
+
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
 
@@ -135,10 +129,12 @@ namespace text_adventure_game.Models
             Console.Clear();
             Console.WriteLine("The town will look like this below\n");
             Console.WriteLine("1. Adventure");
-            Console.WriteLine("2. Inventory");
-            Console.WriteLine("3. Store");
-            Console.WriteLine("4. Tavern\n");
-            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure! Press any key so you can go to the town!");
+            Console.WriteLine("2. Store");
+            Console.WriteLine("3. Inventory");
+            Console.WriteLine("4. Equipped Items");
+            Console.WriteLine("5. Tavern");
+            Console.WriteLine("6. Exit Game\n");
+            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure!\nPress any key so you can go to the town!");
             Console.ReadKey();
         }
 
@@ -171,7 +167,6 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            //player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -244,14 +239,12 @@ namespace text_adventure_game.Models
                             {
                                 Map3();
                             }
-                            //Map3();
                             break;
                         case 4:
                             if(mapComplete >= 3)
                             {
                                 Map4();
                             }
-                            //Map4();
                             break;
                         case 5:
                             //returning to menu
@@ -273,7 +266,7 @@ namespace text_adventure_game.Models
             monster.MonsterDif = 1;
             monster.ChooseMonster();
             int userChoice = 0;
-            //string text;
+
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"You have entered the portal to: {_mapName1}... It's a vast world, you can see the wind blowing through the trees... But what is that! Something sparkled in the bushes.. And you can hear a sound coming from the left...\n");
@@ -310,14 +303,9 @@ namespace text_adventure_game.Models
                                     {
                                         CombatMonster();
                                         Console.ForegroundColor = ConsoleColor.Green;
-                                        if(monster.Health <= 0)
+                                        if(monster.Health <= 0 && bossDefeated == false)
                                         {
                                             Console.WriteLine("A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...");
-                                            //foreach (char c in text)
-                                            //{
-                                            //    Console.Write(c);
-                                            //    Thread.Sleep(30);
-                                            //}
 
                                             Console.ReadKey();
                                             Console.Clear();
@@ -329,11 +317,7 @@ namespace text_adventure_game.Models
                                             Console.WriteLine("3. Store");
                                             Console.WriteLine("4. Tavern");
                                             Console.WriteLine("\nWhat was that...?");
-                                            //foreach (char c in text)
-                                            //{
-                                            //    Console.Write(c);
-                                            //    Thread.Sleep(30);
-                                            //}
+
                                             Console.ReadKey();
                                         }
                                         // Returning to menu
@@ -369,7 +353,6 @@ namespace text_adventure_game.Models
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             int userChoice = 0;
 
-            //string text;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"You have entered the portal to: {_mapName2}... This is a dark forest guarded by higher tier monsters. But what are they guarding you may ask? Well jesus I don't know " +
@@ -405,11 +388,7 @@ namespace text_adventure_game.Models
                                 Console.WriteLine("3. Store");
                                 Console.WriteLine("4. Tavern");
                                 Console.WriteLine("\nWell that was a bit boring right? You should probably go to the right next time...");
-                                //foreach (char c in text)
-                                //{
-                                //    Console.Write(c);
-                                //    Thread.Sleep(30);
-                                //}
+
                                 Console.ReadKey();
                             }
                             // Returning to menu
@@ -433,11 +412,6 @@ namespace text_adventure_game.Models
                                         if (monster.Health <= 0)
                                         {
                                             Console.WriteLine("You saved the cow!! You must be damn proud of yourself!");
-                                            //foreach (char c in text)
-                                            //{
-                                            //    Console.Write(c);
-                                            //    Thread.Sleep(30);
-                                            //}
 
                                             Console.ReadKey();
                                             Console.Clear();
@@ -448,11 +422,7 @@ namespace text_adventure_game.Models
                                             Console.WriteLine("3. Store");
                                             Console.WriteLine("4. Tavern");
                                             Console.WriteLine("\nYou are probably more proud of defeating the monster then saving the cow...right?");
-                                            //foreach (char c in text)
-                                            //{
-                                            //    Console.Write(c);
-                                            //    Thread.Sleep(30);
-                                            //}
+
                                             Console.ReadKey();
                                             if(mapComplete == 1)
                                             {
@@ -488,7 +458,6 @@ namespace text_adventure_game.Models
             monster.MonsterDif = 3;
             monster.ChooseMonster();
 
-            //string text;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"Wow you sure have come a long way if you are already here! No {player.Class} has even gotten this far... good job {player.Name}! " +
@@ -524,11 +493,7 @@ namespace text_adventure_game.Models
                                         if (monster.Health <= 0)
                                         {
                                             Console.WriteLine($"You slayed the {monster.Name} though this was a magical bear you got teleported back to town...");
-                                            //foreach (char c in text)
-                                            //{
-                                            //    Console.Write(c);
-                                            //    Thread.Sleep(30);
-                                            //}
+
                                             Console.ReadKey();
                                             if(mapComplete == 2)
                                             {
@@ -576,11 +541,7 @@ namespace text_adventure_game.Models
                                 Console.WriteLine("3. Store");
                                 Console.WriteLine("4. Tavern");
                                 Console.WriteLine("\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop. But srsly no key");
-                                //foreach (char c in text)
-                                //{
-                                //    Console.Write(c);
-                                //    Thread.Sleep(30);
-                                //}
+
                                 Console.ReadKey();
 
                             }
@@ -630,7 +591,7 @@ namespace text_adventure_game.Models
                                 CombatMonster();
                             }
                            
-                            if(run == false && player.Health > 0)
+                            if(run == false && player.Health > 0 && bossDefeated == false)
                             {
                                 Console.WriteLine($"Now there is no going back... You go forward to the door and opened it! It's the monster from {_mapName1} that were chasing you! You can see that it guards something... " +
                                 $"the monster saw you and runs towards you!");
@@ -639,6 +600,12 @@ namespace text_adventure_game.Models
                                 monster.ChooseMonster();
                                 CombatMonster();
                             }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("There is nothing here. You have already defeated the boss");
+                                Console.ReadKey();
+                            }
                             
                             if(run == false && monster.Health <= 0)
                             {
@@ -646,6 +613,7 @@ namespace text_adventure_game.Models
                                 Console.WriteLine($"Hey it's me again...the creater...\n " +
                                     $"Pretty cool that you actually defeated {monster.Name}. The dragon defended a great treasure and that is the treasure of " +
                                     $"Sucess! You may now feel awesome and cool because you have defeated the danger that once was here. Thanks for playing the game the world is now at peace");
+                                bossDefeated = true;
                                 Console.ReadKey();
                             }
                             if(player.Health <= 0)
