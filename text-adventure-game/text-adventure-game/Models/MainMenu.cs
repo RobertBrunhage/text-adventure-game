@@ -9,9 +9,11 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        public int weaponID;
-        public int HelmetID;
-        public int ChestplateID;
+        public int equippedWeapon;
+        public int equippedHelmet;
+        public int equippedChest;
+        public int equippedPants;
+        public int equippedGloves;
 
         public bool run = false;
 
@@ -34,7 +36,7 @@ namespace text_adventure_game.Models
 
         public MainMenu()
         {
-            Inventory = new List<Item>(); // make this an array with set amount of itemSlots
+            Inventory = new List<Item>();
 
             EquipInventory = new List<Item>();
 
@@ -55,20 +57,24 @@ namespace text_adventure_game.Models
                 //Maces
                 new Mace("Skull Smasher", 15, 3, 3),
                 new Mace("Blood Shedder", 35, 5, 5),
-                new Mace("Harvester", 700, 10, 20),
+                new Mace("Harvester", 700, 30, 30),
+
+                //Staff
+                new Staff("Staff of tree", 300, 10, 20),
 
                 //Helmet
                 new Helmet("Helm of protection", 40, 1, 1, 10, 10),
                 new Helmet("Helm of salvation", 60, 2, 2, 40, 25),
 
                 //Chestplate
-<<<<<<< HEAD
-                new Chestplate("Chest of survival", 80, 1, 2, 10, 10),
-                new Chestplate("Chest of doom", 100, 2, 2, 15, 15)
-=======
-                new Chestplate("Chest lel", 20, 1, 2, 20, 10),
-                new Chestplate("Chest Lel2", 40, 2, 2, 30, 20)
->>>>>>> 31350f9cf6604e24aa9399d05c03d3820c008397
+                new Chestplate("Chest of survival", 20, 1, 2, 20, 10),
+                new Chestplate("Chest of doom", 40, 2, 2, 30, 20),
+
+                //Pants
+                new Pants("Pants of protection", 10, 1, 1, 10, 10),
+
+                //Gloves
+                new Gloves("Glove of swiftness", 20, 1, 1, 10, 10)
             };
         }
 
@@ -162,7 +168,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            //player.Gold = 1000; // cheat for testing
+                            player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -789,13 +795,16 @@ namespace text_adventure_game.Models
             Console.WriteLine("Weapons: \n");
             Console.WriteLine("1. Swords");
             Console.WriteLine("2. Axes");
-            Console.WriteLine("3. Maces\n");
+            Console.WriteLine("3. Maces");
+            Console.WriteLine("4. Staff\n");
 
             Console.WriteLine("Armour\n");
-            Console.WriteLine("4. Helmet");
-            Console.WriteLine("5. Checkplate");
+            Console.WriteLine("5. Helmet");
+            Console.WriteLine("6. Checkplate");
+            Console.WriteLine("7. Pants");
+            Console.WriteLine("8. Gloves");
 
-            while(userChoice < 1 || userChoice > 5)
+            while(userChoice < 1 || userChoice > 8)
             {
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
@@ -805,40 +814,63 @@ namespace text_adventure_game.Models
                             Console.Clear();
                             player.PrintStats();
                             sort = 1;
-                            PrintItems();
-                            BuyItems();
+                            //PrintItems();
+                            //BuyItems();
                             break;
                         case 2:
                             Console.Clear();
                             player.PrintStats();
                             sort = 2;
-                            PrintItems();
-                            BuyItems();
+                            //PrintItems();
+                            //BuyItems();
                             break;
                         case 3:
                             Console.Clear();
                             player.PrintStats();
                             sort = 3;
-                            PrintItems();
-                            BuyItems();
+                            //PrintItems();
+                            //BuyItems();
                             break;
                         case 4:
                             Console.Clear();
                             player.PrintStats();
                             sort = 4;
-                            PrintItems();
-                            BuyItems();
+                            //PrintItems();
+                            //BuyItems();
                             break;
                         case 5:
                             Console.Clear();
                             player.PrintStats();
                             sort = 5;
-                            PrintItems();
-                            BuyItems();
+                            //PrintItems();
+                            //BuyItems();
+                            break;
+                        case 6:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 6;
+                            //PrintItems();
+                            //BuyItems();
+                            break;
+                        case 7:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 7;
+                            //PrintItems();
+                            //BuyItems();
+                            break;
+                        case 8:
+                            Console.Clear();
+                            player.PrintStats();
+                            sort = 8;
+                            //PrintItems();
+                            //BuyItems();
                             break;
                         default:
                             break;
                     }
+                    PrintItems();
+                    BuyItems();
                 }
             }
         }
@@ -851,30 +883,35 @@ namespace text_adventure_game.Models
             {
                 case 1:
                     type = "Sword";
-                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 case 2:
                     type = "Axe";
-                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 case 3:
                     type = "Mace";
-                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
                     break;
                 case 4:
-                    type = "Helmet";
-                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    type = "Staff";
                     break;
                 case 5:
+                    type = "Helmet";
+                    break;
+                case 6:
                     type = "Chestplate";
-                    StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 7:
+                    type = "Pants";
+                    break;
+                case 8:
+                    type = "Gloves";
                     break;
                 default:
                     break;
 
             }
-            int iD = 1;
+            StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
 
+            int iD = 1;
             foreach (Item item in StoreCopy)
             {
                 item.ID = iD;
@@ -908,28 +945,38 @@ namespace text_adventure_game.Models
             {
                 case 1:
                     type = "Sword";
-                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    
                     break;
                 case 2:
                     type = "Axe";
-                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    
                     break;
                 case 3:
                     type = "Mace";
-                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    
                     break;
                 case 4:
-                    type = "Helmet";
-                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    type = "Staff";
+                   
                     break;
                 case 5:
+                    type = "Helmet";
+                    
+                    break;
+                case 6:
                     type = "Chestplate";
-                    SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+                    break;
+                case 7:
+                    type = "Pants";
+                    break;
+                case 8:
+                    type = "Gloves";
                     break;
                 default:
                     break;
 
             }
+            SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
                 foreach (Item item in SortedStore)
@@ -1007,18 +1054,26 @@ namespace text_adventure_game.Models
                 {
                     if (userChoice == item.ID)
                     {
-                        if(item.SlotID == 1 && EquipInventoryArray[0] == null)
+                        if (item.SlotID == 1 && equippedWeapon == 0)
                         {
-                            //weaponID = 1;
-                            EquipInventoryArray[0] = item; // WAAAT
+                            equippedWeapon = 1;
+                            //EquipInventoryArray[0] = item; // WAAAT
                         }
-                        else if(item.SlotID == 2 && HelmetID == 0)
+                        else if(item.SlotID == 2 && equippedHelmet == 0)
                         {
-                            HelmetID = 1;
+                            equippedHelmet = 1;
                         }
-                        else if(item.SlotID == 3 && HelmetID == 0)
+                        else if(item.SlotID == 3 && equippedChest == 0)
                         {
-                            ChestplateID = 1;
+                            equippedChest = 1;
+                        }
+                        else if(item.SlotID == 4 && equippedPants == 0)
+                        {
+                            equippedPants = 1;
+                        }
+                        else if (item.SlotID == 5 && equippedGloves == 0)
+                        {
+                            equippedGloves = 1;
                         }
                         else
                         {
@@ -1077,17 +1132,26 @@ namespace text_adventure_game.Models
                 {
                     if (userChoice == item.ID)
                     {
-                        if (item.SlotID == 1 && weaponID == 1)
+                        if (item.SlotID == 1 && equippedWeapon == 1)
                         {
-                            weaponID = 0;
+                            equippedWeapon = 0;
+                            //EquipInventoryArray[0] = item; // WAAAT
                         }
-                        else if (item.SlotID == 2 && HelmetID == 1)
+                        else if (item.SlotID == 2 && equippedHelmet == 1)
                         {
-                            HelmetID = 0;
+                            equippedHelmet = 0;
                         }
-                        else if (item.SlotID == 3 && HelmetID == 1)
+                        else if (item.SlotID == 3 && equippedChest == 1)
                         {
-                            ChestplateID = 0;
+                            equippedChest = 0;
+                        }
+                        else if (item.SlotID == 4 && equippedPants == 1)
+                        {
+                            equippedPants = 0;
+                        }
+                        else if (item.SlotID == 5 && equippedGloves == 1)
+                        {
+                            equippedGloves = 0;
                         }
                         EquipInventory.Remove(item);
                         player.LowestDamage -= item.LowDamageBoost;
@@ -1106,7 +1170,5 @@ namespace text_adventure_game.Models
     }
 }
 //Soundtrack for the game
-//Staff
-//3 more defensive items
 //Msuic for each zone sound effect when battling
 
