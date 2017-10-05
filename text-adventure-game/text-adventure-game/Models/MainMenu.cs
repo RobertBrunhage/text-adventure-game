@@ -22,6 +22,7 @@ namespace text_adventure_game.Models
         public List<Item> Store { get; set; }
         public List<Item> Inventory { get; set; }
         public List<Item> EquipInventory { get; set; }
+        //public Item[] EquipInventoryArray;
 
         private string _mapName1 = "The glimting forest";
         private string _mapName2 = "The reversed forest";
@@ -33,9 +34,11 @@ namespace text_adventure_game.Models
 
         public MainMenu()
         {
-            Inventory = new List<Item>();
+            Inventory = new List<Item>(); // make this an array with set amount of itemSlots
 
             EquipInventory = new List<Item>();
+
+            //EquipInventoryArray = new Item[3];
 
             Store = new List<Item>()
             {
@@ -59,7 +62,8 @@ namespace text_adventure_game.Models
                 new Helmet("Helm of salvation", 60, 1, 1, 2, 15),
 
                 //Chestplate
-                new Chestplate("Chest lel", 80, 1, 2, 10, 10)
+                new Chestplate("Chest of survival", 80, 1, 2, 10, 10),
+                new Chestplate("Chest of doom", 100, 2, 2, 15, 15)
             };
         }
 
@@ -153,7 +157,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            player.Gold = 1000; // cheat for testing
+                            //player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -187,8 +191,8 @@ namespace text_adventure_game.Models
         {
             Console.Clear();
             player.PrintStats();
-            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP and Armour. This will take about 10 sec. Please wait...");
-            Thread.Sleep(10000);
+            Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP and Armour. This will take about 3 sec. Please wait...");
+            Thread.Sleep(3000);
             player.Health = player.MaxHealth;
             player.Armour = player.MaxArmour;
         }
@@ -986,9 +990,10 @@ namespace text_adventure_game.Models
                 {
                     if (userChoice == item.ID)
                     {
-                        if(item.SlotID == 1 && weaponID == 0)
+                        if(item.SlotID == 1 && EquipInventoryArray[0] == null)
                         {
-                            weaponID = 1;
+                            //weaponID = 1;
+                            EquipInventoryArray[0] = item; // WAAAT
                         }
                         else if(item.SlotID == 2 && HelmetID == 0)
                         {
@@ -1005,6 +1010,7 @@ namespace text_adventure_game.Models
                             Console.ReadKey();
                             break;
                         }
+                        //EquipInventoryArray[0] = item;
                         EquipInventory.Add(item);
                         player.LowestDamage += item.LowDamageBoost;
                         player.HigestDamage += item.HighDamageBoost;
