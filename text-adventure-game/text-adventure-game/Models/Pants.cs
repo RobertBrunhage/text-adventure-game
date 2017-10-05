@@ -16,7 +16,7 @@ namespace text_adventure_game.Models
             base.LowDamageBoost = lowDamageBoost;
             base.HighDamageBoost = highDamageBoost;
             base.ID = 0;
-            base.SlotID = 5;
+            base.SlotID = 4;
             base.Armour = armour;
             base.Type = "Pants";
             base.BaseType = "Pants";

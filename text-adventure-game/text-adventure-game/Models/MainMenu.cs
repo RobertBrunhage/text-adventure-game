@@ -9,12 +9,14 @@ namespace text_adventure_game.Models
 {
     class MainMenu
     {
-        public int equippedWeapon;
-        public int equippedHelmet;
-        public int equippedChest;
-        public int equippedPants;
-        public int equippedGloves;
+        //Used to see what items are equipped
+        private int equippedWeapon; //item.slot1
+        private int equippedHelmet; //item.slot2
+        private int equippedChest; //item.slot3
+        private int equippedPants; //item.slot4
+        private int equippedGloves; //item.slot5
 
+        //Prints different text in adventure 
         public bool run = false;
 
         public Player player = new Player();
@@ -26,12 +28,13 @@ namespace text_adventure_game.Models
         public List<Item> EquipInventory { get; set; }
         //public Item[] EquipInventoryArray;
 
+        //Name of adventure maps
         private string _mapName1 = "The glimting forest";
         private string _mapName2 = "The reversed forest";
         private string _mapName3 = "the black forest";
         private string _mapName4 = "The mysterious castle";
         private int sort = 0; // Print and buy method will use this variable
-        private int mapComplete = 0;
+        private int mapComplete = 0; //Enables us to only play the map we are supposed to
         private bool gameOn = true;
 
         public MainMenu()
@@ -114,13 +117,13 @@ namespace text_adventure_game.Models
         public void Introduction()
         {
             //Introduction
-            string text = ($"Welcome to the world of Adventure of Pixel's. In this world there is all kinds of magical and explorious adventures. " +
+            Console.WriteLine($"Welcome to the world of Adventure of Pixel's. In this world there is all kinds of magical and explorious adventures. " +
                 $"You as a {player.Class} will now be guided by the creator (me....IT's A ME....MARIO) all jokes aside let us begin your adventure, {player.Name}. \n");
-            foreach (char c in text)
-            {
-                Console.Write(c);
-                Thread.Sleep(10);
-            }
+            //foreach (char c in text)
+            //{
+            //    Console.Write(c);
+            //    Thread.Sleep(10);
+            //}
             Console.WriteLine("\nPress any key to continue");
             Console.ReadKey();
 
@@ -168,7 +171,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            player.Gold = 1000; // cheat for testing
+                            //player.Gold = 1000; // cheat for testing
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -186,7 +189,6 @@ namespace text_adventure_game.Models
                         case 6:
                             gameOn = false;
                             break;
-
                         default:
                             Console.Clear();
                             Console.WriteLine($"{player.Name}, to the left of each word you can see a number. Enter the number for where you want to go.");
@@ -249,7 +251,7 @@ namespace text_adventure_game.Models
                             {
                                 Map4();
                             }
-                            Map4();
+                            //Map4();
                             break;
                         case 5:
                             //returning to menu
@@ -271,7 +273,7 @@ namespace text_adventure_game.Models
             monster.MonsterDif = 1;
             monster.ChooseMonster();
             int userChoice = 0;
-            string text;
+            //string text;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"You have entered the portal to: {_mapName1}... It's a vast world, you can see the wind blowing through the trees... But what is that! Something sparkled in the bushes.. And you can hear a sound coming from the left...\n");
@@ -310,12 +312,12 @@ namespace text_adventure_game.Models
                                         Console.ForegroundColor = ConsoleColor.Green;
                                         if(monster.Health <= 0)
                                         {
-                                            text = "A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...";
-                                            foreach (char c in text)
-                                            {
-                                                Console.Write(c);
-                                                Thread.Sleep(30);
-                                            }
+                                            Console.WriteLine("A huge monster appeared that you are not able to fight. You run back as fast as you can and through the portal again...");
+                                            //foreach (char c in text)
+                                            //{
+                                            //    Console.Write(c);
+                                            //    Thread.Sleep(30);
+                                            //}
 
                                             Console.ReadKey();
                                             Console.Clear();
@@ -326,12 +328,12 @@ namespace text_adventure_game.Models
                                             Console.WriteLine("2. Inventory");
                                             Console.WriteLine("3. Store");
                                             Console.WriteLine("4. Tavern");
-                                            text = "\nWhat was that...?";
-                                            foreach (char c in text)
-                                            {
-                                                Console.Write(c);
-                                                Thread.Sleep(30);
-                                            }
+                                            Console.WriteLine("\nWhat was that...?");
+                                            //foreach (char c in text)
+                                            //{
+                                            //    Console.Write(c);
+                                            //    Thread.Sleep(30);
+                                            //}
                                             Console.ReadKey();
                                         }
                                         // Returning to menu
@@ -367,7 +369,7 @@ namespace text_adventure_game.Models
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             int userChoice = 0;
 
-            string text;
+            //string text;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"You have entered the portal to: {_mapName2}... This is a dark forest guarded by higher tier monsters. But what are they guarding you may ask? Well jesus I don't know " +
@@ -402,12 +404,12 @@ namespace text_adventure_game.Models
                                 Console.WriteLine("2. Inventory");
                                 Console.WriteLine("3. Store");
                                 Console.WriteLine("4. Tavern");
-                                text = "\nWell that was a bit boring right? You should probably go to the right next time...";
-                                foreach (char c in text)
-                                {
-                                    Console.Write(c);
-                                    Thread.Sleep(30);
-                                }
+                                Console.WriteLine("\nWell that was a bit boring right? You should probably go to the right next time...");
+                                //foreach (char c in text)
+                                //{
+                                //    Console.Write(c);
+                                //    Thread.Sleep(30);
+                                //}
                                 Console.ReadKey();
                             }
                             // Returning to menu
@@ -430,12 +432,12 @@ namespace text_adventure_game.Models
                                         CombatMonster();
                                         if (monster.Health <= 0)
                                         {
-                                            text = "You saved the cow!! You must be damn proud of yourself!";
-                                            foreach (char c in text)
-                                            {
-                                                Console.Write(c);
-                                                Thread.Sleep(30);
-                                            }
+                                            Console.WriteLine("You saved the cow!! You must be damn proud of yourself!");
+                                            //foreach (char c in text)
+                                            //{
+                                            //    Console.Write(c);
+                                            //    Thread.Sleep(30);
+                                            //}
 
                                             Console.ReadKey();
                                             Console.Clear();
@@ -445,12 +447,12 @@ namespace text_adventure_game.Models
                                             Console.WriteLine("2. Inventory");
                                             Console.WriteLine("3. Store");
                                             Console.WriteLine("4. Tavern");
-                                            text = "\nYou are probably more proud of defeating the monster then saving the cow...right?";
-                                            foreach (char c in text)
-                                            {
-                                                Console.Write(c);
-                                                Thread.Sleep(30);
-                                            }
+                                            Console.WriteLine("\nYou are probably more proud of defeating the monster then saving the cow...right?");
+                                            //foreach (char c in text)
+                                            //{
+                                            //    Console.Write(c);
+                                            //    Thread.Sleep(30);
+                                            //}
                                             Console.ReadKey();
                                             if(mapComplete == 1)
                                             {
@@ -486,7 +488,7 @@ namespace text_adventure_game.Models
             monster.MonsterDif = 3;
             monster.ChooseMonster();
 
-            string text;
+            //string text;
             Console.Clear();
             player.PrintStats();
             Console.WriteLine($"Wow you sure have come a long way if you are already here! No {player.Class} has even gotten this far... good job {player.Name}! " +
@@ -521,12 +523,12 @@ namespace text_adventure_game.Models
                                         Console.ForegroundColor = ConsoleColor.Magenta;
                                         if (monster.Health <= 0)
                                         {
-                                            text = $"You slayed the {monster.Name} though this was a magical bear you got teleported back to town...";
-                                            foreach (char c in text)
-                                            {
-                                                Console.Write(c);
-                                                Thread.Sleep(30);
-                                            }
+                                            Console.WriteLine($"You slayed the {monster.Name} though this was a magical bear you got teleported back to town...");
+                                            //foreach (char c in text)
+                                            //{
+                                            //    Console.Write(c);
+                                            //    Thread.Sleep(30);
+                                            //}
                                             Console.ReadKey();
                                             if(mapComplete == 2)
                                             {
@@ -573,12 +575,12 @@ namespace text_adventure_game.Models
                                 Console.WriteLine("2. Inventory");
                                 Console.WriteLine("3. Store");
                                 Console.WriteLine("4. Tavern");
-                                text = "\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop. But srsly no key";
-                                foreach (char c in text)
-                                {
-                                    Console.Write(c);
-                                    Thread.Sleep(30);
-                                }
+                                Console.WriteLine("\nWell that was a bit boring right? Next time try to go forward instead of just standing there... This is an adventure and a stayventure... HAHAHAH... Okay I will stop. But srsly no key");
+                                //foreach (char c in text)
+                                //{
+                                //    Console.Write(c);
+                                //    Thread.Sleep(30);
+                                //}
                                 Console.ReadKey();
 
                             }
@@ -593,7 +595,7 @@ namespace text_adventure_game.Models
 
         public void Map4()
         {
-            //Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.ForegroundColor = ConsoleColor.Yellow;
             int userChoice = 0;
             monster.MonsterDif = 4;
             monster.ChooseMonster();
@@ -811,60 +813,28 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 1;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 2:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 2;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 3:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 3;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 4:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 4;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 5:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 5;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 6:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 6;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 7:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 7;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         case 8:
-                            Console.Clear();
-                            player.PrintStats();
                             sort = 8;
-                            //PrintItems();
-                            //BuyItems();
                             break;
                         default:
                             break;
@@ -877,6 +847,9 @@ namespace text_adventure_game.Models
 
         public void PrintItems()
         {
+            Console.Clear();
+            player.PrintStats();
+
             string type = string.Empty;
             var StoreCopy = Store.Where(m => m.Type.ToLower() == type.ToLower());
             switch (sort)
@@ -944,24 +917,19 @@ namespace text_adventure_game.Models
             switch (sort)
             {
                 case 1:
-                    type = "Sword";
-                    
+                    type = "Sword";                  
                     break;
                 case 2:
-                    type = "Axe";
-                    
+                    type = "Axe";                   
                     break;
                 case 3:
-                    type = "Mace";
-                    
+                    type = "Mace";                  
                     break;
                 case 4:
-                    type = "Staff";
-                   
+                    type = "Staff";                  
                     break;
                 case 5:
-                    type = "Helmet";
-                    
+                    type = "Helmet";              
                     break;
                 case 6:
                     type = "Chestplate";
@@ -1025,6 +993,7 @@ namespace text_adventure_game.Models
             var sortedInventoryByName = Inventory.OrderBy(x => x.Name);
             int userChoice = 0;
             int iD = 1;
+            Console.WriteLine($"Greetings {player.Name}!");
             Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
             foreach (Item item in sortedInventoryByName) //Print out all the items in the inventory
             {
@@ -1057,7 +1026,6 @@ namespace text_adventure_game.Models
                         if (item.SlotID == 1 && equippedWeapon == 0)
                         {
                             equippedWeapon = 1;
-                            //EquipInventoryArray[0] = item; // WAAAT
                         }
                         else if(item.SlotID == 2 && equippedHelmet == 0)
                         {
@@ -1082,7 +1050,6 @@ namespace text_adventure_game.Models
                             Console.ReadKey();
                             break;
                         }
-                        //EquipInventoryArray[0] = item;
                         EquipInventory.Add(item);
                         player.LowestDamage += item.LowDamageBoost;
                         player.HigestDamage += item.HighDamageBoost;
@@ -1103,6 +1070,7 @@ namespace text_adventure_game.Models
             var sortedInventoryByName = EquipInventory.OrderBy(x => x.Name);
             int userChoice = 0;
             int iD = 1;
+            Console.WriteLine($"Greetings {player.Name}!");
             Console.WriteLine("Inventory         To unequip an item press the key that correspons with the item\n");
             foreach (Item item in sortedInventoryByName)
             {
@@ -1135,7 +1103,6 @@ namespace text_adventure_game.Models
                         if (item.SlotID == 1 && equippedWeapon == 1)
                         {
                             equippedWeapon = 0;
-                            //EquipInventoryArray[0] = item; // WAAAT
                         }
                         else if (item.SlotID == 2 && equippedHelmet == 1)
                         {
