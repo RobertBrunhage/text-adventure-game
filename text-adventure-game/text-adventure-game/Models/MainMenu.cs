@@ -44,7 +44,7 @@ namespace text_adventure_game.Models
         SoundPlayer Map3Sound = new SoundPlayer(text_adventure_game.Properties.Resources.Map3);
         SoundPlayer Map4Sound = new SoundPlayer(text_adventure_game.Properties.Resources.Map4);
         SoundPlayer CombatSound = new SoundPlayer(text_adventure_game.Properties.Resources.CombatSound);
-        
+
         private bool menuLoopSoundBool = false;
 
         public MainMenu()
@@ -544,6 +544,7 @@ namespace text_adventure_game.Models
                                                 mapComplete = 3;
                                                 Console.Clear();
                                                 Console.WriteLine($"You have completed {_mapName3} and found the last key!");
+                                                Console.ReadKey();
                                             }
 
                                         }
@@ -1088,8 +1089,8 @@ namespace text_adventure_game.Models
                     {
                         player.PrintStats();
                         Console.Clear();
-                        Console.WriteLine($"1. Buy for {item.GoldValue} gold");
-                        Console.WriteLine($"2. Sell item for {item.GoldValue / 2} gold");
+                        Console.WriteLine($"1. Equip Item");
+                        Console.WriteLine($"2. Sell item for half price: {item.GoldValue / 2} gold");
                         if (int.TryParse(Console.ReadLine(), out userChoice))
                         {
                             if(userChoice == 1)
