@@ -85,6 +85,11 @@ namespace text_adventure_game.Models
             }
         }
 
+        public void TakeDamage(int _dmg)
+        {
+            Health -= _dmg;
+        }
+
         public void PrintMonsterStats()
         {
             Console.WriteLine($"monster name: {Name}");

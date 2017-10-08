@@ -15,7 +15,7 @@ namespace text_adventure_game.Models
             base.LowDamageBoost = lowDamageBoost;
             base.HighDamageBoost = highDamageBoost;
             base.ID = 0;
-            base.SlotID = 1;
+            base.EquippedSlotID = 1;
             base.Type = "Staff";
             base.BaseType = "Weapon";
         }

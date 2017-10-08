@@ -16,10 +16,10 @@ namespace text_adventure_game.Models
             base.LowDamageBoost = lowDamageBoost;
             base.HighDamageBoost = highDamageBoost;
             base.ID = 0;
-            base.SlotID = 3;
+            base.EquippedSlotID = 3;
             base.Armour = armour;
             base.Type = "Chestplate";
-            base.BaseType = "Chestplate";
+            base.BaseType = "Armour";
         }
     }
 }

@@ -9,7 +9,7 @@ namespace text_adventure_game.Models
     class Player
     {
         //Main things
-        public int MaxHealth { get; set; }
+        public int MaxHealthFromItems { get; set; }
         private int _Health;
         public int Health
         {
@@ -19,11 +19,11 @@ namespace text_adventure_game.Models
             }
             set
             {
-                if(_Health < 0)
+                if(value <= 0)
                 {
                     _Health = 0;
                 }
-                else if(_Health > 200)
+                else if(value >= 200)
                 {
                     _Health = 200;
                 }
@@ -60,14 +60,14 @@ namespace text_adventure_game.Models
                     {
                         case 1:
                             Health = 100;
-                            MaxHealth = Health;
+                            MaxHealthFromItems = Health;
                             LowestDamage = 1;
                             Armour = 0;
                             Gold = 0;
                             break;
                         case 2:
                             Health = 100;
-                            MaxHealth = Health;
+                            MaxHealthFromItems = Health;
                             LowestDamage = 1;
                             Armour = 0;
                             Gold = 0;
@@ -139,6 +139,23 @@ namespace text_adventure_game.Models
 
 
         }
+
+        public void TakeDamage(int _dmg)
+        {
+            if(Armour > 0)
+            {
+                Armour -= _dmg;
+                if(Armour <= 0)
+                {
+                    Armour = 0;
+                }
+            }
+            else
+            {
+                Health -= _dmg;
+            }
+        }
+
         public void PrintStats()
         {
             Console.Clear();
