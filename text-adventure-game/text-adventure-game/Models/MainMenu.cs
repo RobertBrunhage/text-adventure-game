@@ -11,7 +11,6 @@ namespace text_adventure_game.Models
     class MainMenu
     {
         #region Private Variables
-        //Used to see what items are equipped
 
         //Name of adventure maps
         private string _mapName1 = "The glimting forest";
@@ -788,7 +787,7 @@ namespace text_adventure_game.Models
                             }
                             else
                             {
-                                Console.WriteLine($"You can't run from {monster.Name} you need more damage");
+                                Console.WriteLine($"You can't run from {monster.Name} you need {monster.MaxDamage - player.HigestDamage + 1} more damage"); // Added plus 1 because we need at least 1 more damage than the monster
                                 Console.ReadKey();
                             }
                             break;
@@ -818,7 +817,7 @@ namespace text_adventure_game.Models
             }
             else if (_run == true)
             {
-                Console.WriteLine("You will now be returned to the menu");
+                Console.WriteLine("You run away like a coward to the town.");
                 Console.ReadKey();
                 Console.Clear();
                 // Returning to menu
