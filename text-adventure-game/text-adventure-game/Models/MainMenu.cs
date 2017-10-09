@@ -845,7 +845,7 @@ namespace text_adventure_game.Models
                 Console.WriteLine("6. Checkplate");
                 Console.WriteLine("7. Pants");
                 Console.WriteLine("8. Gloves");
-                Console.WriteLine("9. Exit Store");
+                Console.WriteLine("0. Exit Store");
 
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
