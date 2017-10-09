@@ -12,11 +12,6 @@ namespace text_adventure_game.Models
     {
         #region Private Variables
         //Used to see what items are equipped
-        private bool _equippedWeapon;
-        private bool _equippedHelmet;
-        private bool _equippedChest;
-        private bool _equippedPants;
-        private bool _equippedGloves;
 
         //Name of adventure maps
         private string _mapName1 = "The glimting forest";
@@ -59,42 +54,41 @@ namespace text_adventure_game.Models
             Store = new List<Item>()
             {
                 //Swords
-                new Sword("Vorpal Blade", 5, 2, 2),
-                new Sword("Dragon Slayer", 25, 4, 4),
-                new Sword("Sword of Judgment", 70, 7, 7),
+                new Weapon("Sword", 1, "Vorpal Blade", 5, 2, 2),
+                new Weapon("Sword", 1, "Dragon Slayer", 25, 4, 4),
+                new Weapon("Sword", 1, "Sword of Judgment", 70, 7, 7),
 
                 //Axes
-                new Axe("Blight's Plight", 10, 2, 3),
-                new Axe("The Grim Cleaver", 75, 7, 8),
-                new Axe("Harbringer of Death", 150, 9, 16),
+                new Weapon("Axe", 1, "Blight's Plight", 10, 2, 3),
+                new Weapon("Axe", 1, "The Grim Cleaver", 75, 7, 8),
+                new Weapon("Axe", 1, "Harbringer of Death", 150, 9, 16),
 
                 //Maces
-                new Mace("Skull Smasher", 15, 3, 3),
-                new Mace("Blood Shedder", 35, 5, 5),
-                new Mace("Harvester", 700, 30, 30),
+                new Weapon("Mace", 1, "Skull Smasher", 15, 3, 3),
+                new Weapon("Mace", 1, "Blood Shedder", 35, 5, 5),
+                new Weapon("Mace", 1, "Harvester", 700, 30, 30),
 
                 //Staff
-                new Staff("Staff of tree", 300, 10, 20),
+                new Weapon("Staff", 1, "Staff of tree", 300, 10, 20),
 
                 //Helmet
-                new Helmet("Helm of protection", 30, 1, 1, 10, 10),
-                new Helmet("Helm of salvation", 60, 2, 2, 40, 25),
+                new Armour("Helmet", 2, "Helm of protection", 30, 1, 1, 10, 10),
+                new Armour("Helmet", 2, "Helm of salvation", 60, 2, 2, 40, 25),
 
                 //Chestplate
-                new Chestplate("Chest of survival", 20, 1, 2, 20, 10),
-                new Chestplate("Chest of doom", 40, 2, 2, 30, 20),
+                new Armour("Chestplate", 3, "Chest of survival", 20, 1, 2, 20, 10),
+                new Armour("Chestplate", 3, "Chest of doom", 40, 2, 2, 30, 20),
 
                 //Pants
-                new Pants("Pants of protection", 15, 1, 1, 10, 10),
+                new Armour("Pants", 4, "Pants of protection", 15, 1, 1, 10, 10),
 
                 //Gloves
-                new Gloves("Glove of swiftness", 20, 1, 1, 10, 10)
+                new Armour("Gloves", 5, "Glove of swiftness", 20, 1, 1, 10, 10)
             };
         }
 
         public void StartProgram()
         {
-
             int userChoice = 0;
             do
             {
@@ -196,6 +190,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
+                            player.Gold = 1000;
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -1088,30 +1083,30 @@ namespace text_adventure_game.Models
                         {
                             if(userChoice == 1)
                             {
-                                if (item.EquippedSlotID == 1 && _equippedWeapon == false)
+                                if (!IsEquipped("Sword") && !IsEquipped("Axe") && !IsEquipped("Mace") && !IsEquipped("Staff") && item.EquippedSlotID == 1)
                                 {
-                                    _equippedWeapon = true;
+                                    item.Equipped = true;
                                 }
-                                else if (item.EquippedSlotID == 2 && _equippedHelmet == false)
+                                else if (!IsEquipped("Helmet") && item.EquippedSlotID == 2)
                                 {
-                                    _equippedHelmet = true;
+                                    item.Equipped = true;
                                 }
-                                else if (item.EquippedSlotID == 3 && _equippedChest == false)
+                                else if (!IsEquipped("Chestplate") && item.EquippedSlotID == 3)
                                 {
-                                    _equippedChest = true;
+                                    item.Equipped = true;
                                 }
-                                else if (item.EquippedSlotID == 4 && _equippedPants == false)
+                                else if (!IsEquipped("Pants") && item.EquippedSlotID == 4)
                                 {
-                                    _equippedPants = true;
+                                    item.Equipped = true;
                                 }
-                                else if (item.EquippedSlotID == 5 && _equippedGloves == false)
+                                else if (!IsEquipped("Gloves") && item.EquippedSlotID == 5)
                                 {
-                                    _equippedGloves = true;
+                                    item.Equipped = true;
                                 }
                                 else
                                 {
                                     Console.Clear();
-                                    Console.WriteLine($"You already have a {item.BaseType} equipped");
+                                    Console.WriteLine($"You already have a {item.Type} equipped");
                                     Console.ReadKey();
                                     break;
                                 }
@@ -1178,25 +1173,25 @@ namespace text_adventure_game.Models
                 {
                     if (userChoice == item.ID)
                     {
-                        if (item.EquippedSlotID == 1 && _equippedWeapon == true)
+                        if (IsEquipped("Sword") && IsEquipped("Axe") && IsEquipped("Mace") && IsEquipped("Staff") && item.EquippedSlotID == 1)
                         {
-                            _equippedWeapon = false;
+                            item.Equipped = false;
                         }
-                        else if (item.EquippedSlotID == 2 && _equippedHelmet == true)
+                        else if (IsEquipped("Helmet") && item.EquippedSlotID == 2)
                         {
-                            _equippedHelmet = false;
+                            item.Equipped = false;
                         }
-                        else if (item.EquippedSlotID == 3 && _equippedChest == true)
+                        else if (IsEquipped("Chestplate") && item.EquippedSlotID == 3)
                         {
-                            _equippedChest = false;
+                            item.Equipped = false;
                         }
-                        else if (item.EquippedSlotID == 4 && _equippedPants == true)
+                        else if (IsEquipped("Pants") && item.EquippedSlotID == 4)
                         {
-                            _equippedPants = false;
+                            item.Equipped = false;
                         }
-                        else if (item.EquippedSlotID == 5 && _equippedGloves == true)
+                        else if (IsEquipped("Gloves") && item.EquippedSlotID == 5)
                         {
-                            _equippedGloves = false;
+                            item.Equipped = false;
                         }
                         EquipInventory.Remove(item);
                         player.LowestDamage -= item.LowDamageBoost;
@@ -1211,6 +1206,18 @@ namespace text_adventure_game.Models
                     }
                 }
             }
+        }
+
+        public bool IsEquipped(string type)
+        {
+            foreach (Item item in EquipInventory)
+            {
+                if(item.Type.ToLower() == type.ToLower() && item.Equipped == true)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace text_adventure_game.Models
 {
     class Item : IItem
     {
+        public bool Equipped { get; set; }
         public string Name { get; set; }           
         public int GoldValue { get; set; }         
         public int LowDamageBoost { get; set; }    
