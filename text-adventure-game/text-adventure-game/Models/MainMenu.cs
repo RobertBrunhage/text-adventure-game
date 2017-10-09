@@ -190,7 +190,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            player.Gold = 1000;
+                            //player.Gold = 1000;
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -1041,7 +1041,7 @@ namespace text_adventure_game.Models
 
         public void PrintInventory()
         {
-            var sortedInventoryByName = Inventory.OrderBy(x => x.Name);
+            var sortedInventoryByName = Inventory.OrderBy(x => x.EquippedSlotID);
             int userChoice = 0;
             int iD = 1;
             Console.WriteLine($"Greetings {player.Name}!");
@@ -1139,7 +1139,7 @@ namespace text_adventure_game.Models
 
         public void PrintEquippedInventory()
         {
-            var sortedInventoryByName = EquipInventory.OrderBy(x => x.Name);
+            var sortedInventoryByName = EquipInventory.OrderBy(x => x.EquippedSlotID);
             int userChoice = 0;
             int iD = 1;
             Console.WriteLine($"Greetings {player.Name}!");
