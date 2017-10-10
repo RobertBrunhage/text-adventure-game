@@ -52,6 +52,7 @@ namespace text_adventure_game.Models
 
             Store = new List<Item>()
             {
+
                 //Swords
                 new Weapon("Sword", 1, "Vorpal Blade", 5, 2, 2),
                 new Weapon("Sword", 1, "Dragon Slayer", 25, 4, 4),
@@ -70,18 +71,17 @@ namespace text_adventure_game.Models
                 //Staff
                 new Weapon("Staff", 1, "Staff of tree", 300, 10, 20),
 
-                //Helmet
+
                 new Armour("Helmet", 2, "Helm of protection", 30, 1, 1, 10, 10),
                 new Armour("Helmet", 2, "Helm of salvation", 60, 2, 2, 40, 25),
 
-                //Chestplate
+
                 new Armour("Chestplate", 3, "Chest of survival", 20, 1, 2, 20, 10),
                 new Armour("Chestplate", 3, "Chest of doom", 40, 2, 2, 30, 20),
 
-                //Pants
                 new Armour("Pants", 4, "Pants of protection", 15, 1, 1, 10, 10),
 
-                //Gloves
+
                 new Armour("Gloves", 5, "Glove of swiftness", 20, 1, 1, 10, 10)
             };
         }
@@ -1105,7 +1105,14 @@ namespace text_adventure_game.Models
                                 else
                                 {
                                     Console.Clear();
-                                    Console.WriteLine($"You already have a {item.Type} equipped");
+                                    if(item.BaseType.ToLower() == "Weapon".ToLower())
+                                    {
+                                        Console.WriteLine($"You already have a {item.BaseType} equipped");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine($"You already have a {item.Type} equipped");
+                                    }
                                     Console.ReadKey();
                                     break;
                                 }
