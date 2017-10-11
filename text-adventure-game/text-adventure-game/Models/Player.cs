@@ -33,8 +33,8 @@ namespace text_adventure_game.Models
                 }
             }
         }
-        public int LowestDamage { get; set; }
-        public int HigestDamage { get; set; }
+        public int MinDamage { get; set; }
+        public int MaxDamage { get; set; }
         public string Name { get; set; }
         public string Class { get; set; }
         public int Age { get; set; }
@@ -61,14 +61,14 @@ namespace text_adventure_game.Models
                         case 1:
                             Health = 100;
                             MaxHealthFromItems = Health;
-                            LowestDamage = 1;
+                            MinDamage = 1;
                             Armour = 0;
                             Gold = 0;
                             break;
                         case 2:
                             Health = 100;
                             MaxHealthFromItems = Health;
-                            LowestDamage = 1;
+                            MinDamage = 1;
                             Armour = 0;
                             Gold = 0;
                             break;
@@ -93,14 +93,14 @@ namespace text_adventure_game.Models
                     if(userInput == 1)
                     {
                         Class = "Warrior";
-                        HigestDamage = 2;
+                        MaxDamage = 2;
                         Armour += 10;
                         MaxArmour = Armour;
                     }
                     else if (userInput == 2)
                     {
                         Class = "Mage";
-                        HigestDamage = 3;
+                        MaxDamage = 3;
                     }        
                 }
             } while (userInput <= 0 || userInput > 2);
@@ -161,7 +161,7 @@ namespace text_adventure_game.Models
         {
             Console.Clear();
             Console.WriteLine($"|HP {Health}                Name: {Name}         Age: {Age}");
-            Console.WriteLine($"|Damage: {LowestDamage} - {HigestDamage}         Armour: {Armour}");
+            Console.WriteLine($"|Damage: {MinDamage} - {MaxDamage}         Armour: {Armour}");
             Console.WriteLine($"|Gold: {Gold}");
             Console.WriteLine("|_________________________________________________________");
         }

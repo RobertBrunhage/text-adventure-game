@@ -18,7 +18,7 @@ namespace text_adventure_game.Models
         private string _mapName3 = "the black forest";
         private string _mapName4 = "The mysterious castle";
 
-        private int _sort = 0; // Print and buy method will use this variable for sorting items
+        private int _sort = 0; // buy method will use this variable for sorting items
         private int _mapComplete = 0; //Enables us to only play the map we are supposed to untill we finish all maps
         private bool _gameOn = true;
 
@@ -133,7 +133,6 @@ namespace text_adventure_game.Models
 
         public void Introduction()
         {
-            //Introduction
             Console.WriteLine($"Welcome to the world of Adventure of Pixel's. \nIn this world there is all kinds of magical and explorious adventures. " +
                 $"\nYou as a {player.Class} will now be guided by the creator (me....IT's A ME....MARIO). \nAll jokes aside let us begin your adventure, {player.Name}. \n");
 
@@ -170,7 +169,6 @@ namespace text_adventure_game.Models
 
         public void GameStart() //Returning here all the time
         {     
-
             //Main Menu
             int userChoice = 0;
             do
@@ -203,7 +201,6 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            player.Gold = 1000;
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -276,7 +273,6 @@ namespace text_adventure_game.Models
                                 Console.WriteLine($"You need to find the key in {_mapName1} before you can go to {_mapName2}");
                                 Console.ReadKey();
                             }
-                            //Map2();
                             break;
                         case 3:
                             if (_mapComplete >= 2)
@@ -690,6 +686,7 @@ namespace text_adventure_game.Models
                                 Console.WriteLine($"You are fatigued but you keep going forward and then up the long staircase...\nThere is a another big door but a strong {monster.Name} defends it you run towards it to attack!");
                                 Console.ReadKey();
                                 CombatMonster();
+                                Console.ForegroundColor = ConsoleColor.Yellow;
                                 _map4Sound.PlayLooping();
                             }
 
@@ -703,6 +700,7 @@ namespace text_adventure_game.Models
                                     monster.MonsterDif = 6;
                                     monster.ChooseMonster();
                                     CombatMonster();
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
                                     _map4Sound.PlayLooping();
 
                                     if (_run == false && monster.Health <= 0)
@@ -737,6 +735,7 @@ namespace text_adventure_game.Models
                             monster.MonsterDif = rndMonster.Next(1, 4);
                             monster.ChooseMonster();
                             CombatMonster();
+                            Console.ForegroundColor = ConsoleColor.Yellow;
                             _map4Sound.PlayLooping();
 
                             while (_run == false && player.Health > 0)
@@ -774,7 +773,6 @@ namespace text_adventure_game.Models
 
         void CombatMonster()
         {
-            
             Console.ForegroundColor = ConsoleColor.Red;
             int userChoice = 0;
             Random rndPlayerDamage = new Random();
@@ -822,7 +820,7 @@ namespace text_adventure_game.Models
                     switch (userChoice)
                     {
                         case 1:  
-                            int playerDamage = rndPlayerDamage.Next(player.LowestDamage, player.HigestDamage + 1);
+                            int playerDamage = rndPlayerDamage.Next(player.MinDamage, player.MaxDamage + 1);
                             int monsterDamage = rndMonsterDamage.Next(monster.MinDamage, monster.MaxDamage + 1);
 
                             monster.TakeDamage(playerDamage);
@@ -832,13 +830,13 @@ namespace text_adventure_game.Models
                             Console.ReadKey();
                             break;
                         case 2:
-                            if(player.HigestDamage > monster.MaxDamage)
+                            if(player.MaxDamage > monster.MaxDamage)
                             {
                                 _run = true;
                             }
                             else
                             {
-                                Console.WriteLine($"You can't run from {monster.Name} you need {monster.MaxDamage - player.HigestDamage + 1} more damage"); // Added plus 1 because we need at least 1 more damage than the monster
+                                Console.WriteLine($"You can't run from {monster.Name} you need {monster.MaxDamage - player.MaxDamage + 1} more damage"); // Added plus 1 because we need at least 1 more damage than the monster
                                 Console.ReadKey();
                             }
                             break;
@@ -904,42 +902,34 @@ namespace text_adventure_game.Models
                     {
                         case 1:
                             _sort = 1;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 2:
                             _sort = 2;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 3:
                             _sort = 3;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 4:
                             _sort = 4;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 5:
                             _sort = 5;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 6:
                             _sort = 6;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 7:
                             _sort = 7;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 8:
                             _sort = 8;
-                            PrintItems();
                             BuyItems();
                             break;
                         case 0:
@@ -952,72 +942,10 @@ namespace text_adventure_game.Models
             } while (exitStore == false);
         }
 
-        public void PrintItems()
+        public void BuyItems()
         {
             Console.Clear();
             player.PrintStats();
-
-            string type = string.Empty;
-            var SortedStoreByType = Store.Where(m => m.Type.ToLower() == type.ToLower()); // No items will be displayed
-            switch (_sort)
-            {
-                case 1:
-                    type = "Sword";
-                    break;
-                case 2:
-                    type = "Axe";
-                    break;
-                case 3:
-                    type = "Mace";
-                    break;
-                case 4:
-                    type = "Staff";
-                    break;
-                case 5:
-                    type = "Helmet";
-                    break;
-                case 6:
-                    type = "Chestplate";
-                    break;
-                case 7:
-                    type = "Pants";
-                    break;
-                case 8:
-                    type = "Gloves";
-                    break;
-                default:
-                    break;
-
-            }
-            SortedStoreByType = Store.Where(m => m.Type.ToLower() == type.ToLower()); // Sorts out all the other items that are not the wanted type
-
-            int iD = 1;
-            foreach (Item item in SortedStoreByType)
-            {
-                item.ID = iD;
-                Console.WriteLine($"{item.ID}. {item.Type}");
-                Console.WriteLine($"{item.Name}");
-                Console.WriteLine($"Price: {item.GoldValue} gold");
-                if (item.HealthIncrease > 0)
-                {
-                    Console.WriteLine($"Health: {item.HealthIncrease} increase");
-                }
-                if (item.LowDamageBoost >= 1 && item.HighDamageBoost >= 1)
-                {
-                    Console.WriteLine($"Damage: {item.LowDamageBoost} - {item.HighDamageBoost} damage increase");
-                }
-                if (item.Armour > 0)
-                {
-                    Console.WriteLine($"Armour: {item.Armour}");
-                }
-                Console.WriteLine();
-                iD++;
-            }
-            
-        }
-
-        public void BuyItems()
-        {
             int userChoice = 0;
 
             string type = string.Empty;
@@ -1053,6 +981,29 @@ namespace text_adventure_game.Models
 
             }
             SortedStore = Store.Where(m => m.Type.ToLower() == type.ToLower());
+            int iD = 1;
+            foreach (Item item in SortedStore)
+            {
+                item.ID = iD;
+                Console.WriteLine($"{item.ID}. {item.Type}");
+                Console.WriteLine($"{item.Name}");
+                Console.WriteLine($"Price: {item.GoldValue} gold");
+                if (item.HealthIncrease > 0)
+                {
+                    Console.WriteLine($"Health: {item.HealthIncrease} increase");
+                }
+                if (item.LowDamageBoost >= 1 && item.HighDamageBoost >= 1)
+                {
+                    Console.WriteLine($"Damage: {item.LowDamageBoost} - {item.HighDamageBoost} damage increase");
+                }
+                if (item.Armour > 0)
+                {
+                    Console.WriteLine($"Armour: {item.Armour}");
+                }
+                Console.WriteLine();
+                iD++;
+            }
+
             if (int.TryParse(Console.ReadLine(), out userChoice))
             {
                 foreach (Item item in SortedStore)
@@ -1094,12 +1045,12 @@ namespace text_adventure_game.Models
         {
             var sortedInventoryByName = Inventory.OrderBy(x => x.EquippedSlotID);
             int userChoice = 0;
-            int iD = 1;
+            int id = 1;
             Console.WriteLine($"Greetings {player.Name}!");
             Console.WriteLine("Inventory         To equip an item press the key that correspons with the item\n");
             foreach (Item item in sortedInventoryByName) //Print out all the items in the inventory
             {
-                item.ID = iD;
+                item.ID = id;
                 Console.WriteLine($"{item.ID}. {item.Type}");
                 Console.WriteLine($"{item.Name}");
                 Console.WriteLine($"Price: {item.GoldValue} gold");
@@ -1116,7 +1067,7 @@ namespace text_adventure_game.Models
                     Console.WriteLine($"Armour: {item.Armour}");
                 }
                 Console.WriteLine();
-                iD++;
+                id++;
             }
 
             Console.WriteLine("Type number of item to equip\n");
@@ -1170,8 +1121,8 @@ namespace text_adventure_game.Models
                                 }
 
                                 EquipInventory.Add(item);
-                                player.LowestDamage += item.LowDamageBoost;
-                                player.HigestDamage += item.HighDamageBoost;
+                                player.MinDamage += item.LowDamageBoost;
+                                player.MaxDamage += item.HighDamageBoost;
                                 player.MaxArmour += item.Armour;
                                 player.MaxHealthFromItems += item.HealthIncrease;
                                 Inventory.Remove(item);
@@ -1252,8 +1203,8 @@ namespace text_adventure_game.Models
                             item.Equipped = false;
                         }
                         EquipInventory.Remove(item);
-                        player.LowestDamage -= item.LowDamageBoost;
-                        player.HigestDamage -= item.HighDamageBoost;
+                        player.MinDamage -= item.LowDamageBoost;
+                        player.MaxDamage -= item.HighDamageBoost;
                         player.MaxArmour -= item.Armour;
                         player.MaxHealthFromItems -= item.HealthIncrease;
                         Inventory.Add(item);
