@@ -10,6 +10,7 @@ namespace text_adventure_game.Models
     {
         //Using this so that Item must have these properties or else we get an error early on.
 
+        bool Equipped { get; set; }          //What item is equipped and not equipped
         string Name { get; set; }            //Name of item
         int GoldValue { get; set; }          //What the item will cost
         int LowDamageBoost { get; set; }     //The damage increase it will do to minimun damage of player

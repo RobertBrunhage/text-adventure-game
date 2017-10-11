@@ -96,5 +96,18 @@ namespace text_adventure_game.Models
             Console.WriteLine($"monster health: {Health}");
             Console.WriteLine($"Monster damage: {MinDamage} - {MaxDamage}");
         }
+
+        public void PrintBossStats()
+        {
+            Console.WriteLine(@"________                                               _____  ________                         ");
+            Console.WriteLine(@"\______ \____________     ____   ____   ____     _____/ ____\ \______ \   ____   ____   _____  ");
+            Console.WriteLine(@" |    |  \_  __ \__  \   / ___\ /  _ \ /    \   /  _ \   __\   |    |  \ /  _ \ /  _ \ /     \ ");
+            Console.WriteLine(@" |    `   \  | \// __ \_/ /_/  >  <_> )   |  \ (  <_> )  |     |    `   (  <_> |  <_> )  Y Y  \");
+            Console.WriteLine(@"/_______  /__|  (____  /\___  / \____/|___|  /  \____/|__|    /_______  /\____/ \____/|__|_|  /");
+            Console.WriteLine(@"        \/           \//_____/             \/                         \/                    \/ ");
+            
+            Console.WriteLine($"monster health: {Health}");
+            Console.WriteLine($"Monster damage: {MinDamage} - {MaxDamage}");
+        }
     }
 }

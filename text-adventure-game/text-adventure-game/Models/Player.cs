@@ -84,23 +84,24 @@ namespace text_adventure_game.Models
                 Console.Clear();
                 Console.WriteLine("What class would you like to play?\n");
                 Console.WriteLine("1. Warrior");
+                Console.WriteLine("Has 10 starting armour and 2 in starting damage\n");
                 Console.WriteLine("2. Mage");
+                Console.WriteLine("Has no armour but 3 in starting damage");
 
                 if (int.TryParse(Console.ReadLine(), out userInput))
                 {
-                    switch (userInput)
+                    if(userInput == 1)
                     {
-                        case 1:
-                            Class = "Warrior";
-                            HigestDamage = 2;
-                            Armour += 10;
-                            MaxArmour = Armour;
-                            break;
-                        case 2:
-                            Class = "Mage";
-                            HigestDamage = 3;
-                            break;
+                        Class = "Warrior";
+                        HigestDamage = 2;
+                        Armour += 10;
+                        MaxArmour = Armour;
                     }
+                    else if (userInput == 2)
+                    {
+                        Class = "Mage";
+                        HigestDamage = 3;
+                    }        
                 }
             } while (userInput <= 0 || userInput > 2);
         }

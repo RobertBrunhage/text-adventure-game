@@ -63,6 +63,15 @@ namespace text_adventure_game.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream BossSound {
+            get {
+                return ResourceManager.GetStream("BossSound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream CombatSound {
             get {
                 return ResourceManager.GetStream("CombatSound", resourceCulture);

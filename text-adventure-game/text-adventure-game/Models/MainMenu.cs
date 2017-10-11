@@ -28,8 +28,10 @@ namespace text_adventure_game.Models
         private SoundPlayer _map3Sound = new SoundPlayer(text_adventure_game.Properties.Resources.Map3);
         private SoundPlayer _map4Sound = new SoundPlayer(text_adventure_game.Properties.Resources.Map4);
         private SoundPlayer _combatSound = new SoundPlayer(text_adventure_game.Properties.Resources.CombatSound);
+        private SoundPlayer _bossSound = new SoundPlayer(text_adventure_game.Properties.Resources.BossSound);
 
         private bool _menuLoopOn = false;
+        private bool _combatSoundOn = false;
 
         //Prints different text in adventure 
         private bool _run = false;
@@ -93,6 +95,7 @@ namespace text_adventure_game.Models
             {
                 _menuLoopSound.PlayLooping();
                 _menuLoopOn = true;
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Clear();
                 Console.WriteLine(@" _______     _                                                     ___    ______ _             _ _     ");
                 Console.WriteLine(@"(_______)   | |                   _                               / __)  (_____ (_)           | ( )    ");
@@ -101,7 +104,7 @@ namespace text_adventure_game.Models
                 Console.WriteLine(@"| |   | ( (_| |\ V /| ____| | | || |_| |_| | |   | ____|  | |_| || |     | |    | |) X (| ____| ||___ |");
                 Console.WriteLine(@"|_|   |_|\____| \_/ |_____)_| |_| \__)____/|_|   |_____)   \___/ |_|     |_|    |_(_/ \_)_____)\_|___/ ");
                 Console.WriteLine(@"                                                                                                       ");
-                    
+                Console.ResetColor();
                 Console.WriteLine("1. New Game");
                 Console.WriteLine("2. Exit Game");
 
@@ -150,7 +153,18 @@ namespace text_adventure_game.Models
             Console.WriteLine("4. Equipped Items");
             Console.WriteLine("5. Tavern");
             Console.WriteLine("6. Exit Game\n");
-            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure!\nPress any key so you can go to the town!");
+            Console.WriteLine("Simple right? well I won't bore you with this so it's up to you to start your adventure!\nPress any key so you can go to the town!\n");
+            Console.ReadKey();
+            Console.Clear();
+            if(player.Class.ToLower() == "warrior")
+            {
+                Console.WriteLine($"One more thing... You as a {player.Class} has a starting armour of 10.\nThink of it as extra HP and you are good to go!");
+            }
+            else
+            {
+                Console.WriteLine($"One more thing... You as a {player.Class} don't have any starting armour.\nWhen you get it though, think of it as extra HP and you are good to go!");
+            }
+            
             Console.ReadKey();
         }
 
@@ -189,7 +203,7 @@ namespace text_adventure_game.Models
                             AskAdventure();
                             break;
                         case 2:
-                            //player.Gold = 1000;
+                            player.Gold = 1000;
                             player.PrintStats();
                             ItemStore();
                             break;
@@ -224,8 +238,11 @@ namespace text_adventure_game.Models
             player.PrintStats();
             Console.WriteLine($"Welcome {player.Name}! I will now begin restoring your HP and Armour. This will take about 3 sec. Please wait...");
             Thread.Sleep(3000);
+            Console.Clear();
             player.Health = player.MaxHealthFromItems;
             player.Armour = player.MaxArmour;
+            Console.ReadKey();
+
         }
 
         public void AskAdventure()
@@ -245,16 +262,19 @@ namespace text_adventure_game.Models
                 {
                     switch (userChoice)
                     {
-                        case 1:
-                            if (_mapComplete >= 0)
-                            {
-                                Map1();
-                            }
+                        case 1: 
+                             Map1();                           
                             break;
                         case 2:
                             if (_mapComplete >= 1)
                             {
                                 Map2();
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"You need to find the key in {_mapName1} before you can go to {_mapName2}");
+                                Console.ReadKey();
                             }
                             //Map2();
                             break;
@@ -263,11 +283,23 @@ namespace text_adventure_game.Models
                             {
                                 Map3();
                             }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"You need to find the key in {_mapName2} before you can go to {_mapName3}");
+                                Console.ReadKey();
+                            }
                             break;
                         case 4:
                             if(_mapComplete >= 3)
                             {
                                 Map4();
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine($"You need to find the key in {_mapName3} before you can go to {_mapName4}");
+                                Console.ReadKey();
                             }
                             break;
                         case 5:
@@ -742,7 +774,7 @@ namespace text_adventure_game.Models
 
         void CombatMonster()
         {
-            _combatSound.PlayLooping();
+            
             Console.ForegroundColor = ConsoleColor.Red;
             int userChoice = 0;
             Random rndPlayerDamage = new Random();
@@ -754,13 +786,32 @@ namespace text_adventure_game.Models
             {
                 Console.Clear();
                 player.PrintStats();
-                monster.PrintMonsterStats();
+                
+                if(monster.MonsterDif == 6)
+                {
+                    if(_combatSoundOn == false)
+                    {
+                        _bossSound.PlayLooping();
+                        _combatSoundOn = true;
+                    }
+                    monster.PrintBossStats();
+                }
+                else
+                {
+                    if(_combatSoundOn == false)
+                    {
+                        _combatSound.PlayLooping();
+                        _combatSoundOn = true;
+                    }
+                    monster.PrintMonsterStats();
+                }
+
                 if (player.Class.ToLower() == "mage")
                 {
                     Console.WriteLine("\n1. Fire ball");
                     Console.WriteLine("2. run");
                 }
-                else if (player.Class.ToLower() == "warrior")
+                else
                 {
                     Console.WriteLine("\n1. Quick Attack");
                     Console.WriteLine("2. run");
@@ -798,6 +849,7 @@ namespace text_adventure_game.Models
             } while (monster.Health > 0 && player.Health > 0 && _run == false);
             Console.Clear();
             Console.ResetColor();
+            _combatSoundOn = false;
             if (monster.Health <= 0)
             {
                 int monsterGold = rndMonsterGold.Next(monster.MinGold, monster.MaxGold + 1);

@@ -112,7 +112,7 @@
     <None Include="CombatSound.wav" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Fireball.wav" />
+    <None Include="Resources\BossSound.wav" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
