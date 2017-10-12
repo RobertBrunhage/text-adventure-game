@@ -13,7 +13,7 @@ namespace text_adventure_game.Models
         #region Private Variables
 
         //Name of adventure maps
-        private string _mapName1 = "The glimting forest";
+        private string _mapName1 = "The glinting forest";
         private string _mapName2 = "The reversed forest";
         private string _mapName3 = "the black forest";
         private string _mapName4 = "The mysterious castle";
@@ -71,7 +71,7 @@ namespace text_adventure_game.Models
                 new Weapon("Mace", 1, "Harvester", 700, 30, 30),
 
                 //Staff
-                new Weapon("Staff", 1, "Staff of tree", 300, 10, 20),
+                new Weapon("Staff", 1, "Staff of Destruction", 300, 10, 20),
 
 
                 new Armour("Helmet", 2, "Helm of protection", 30, 1, 1, 10, 10),
@@ -84,7 +84,7 @@ namespace text_adventure_game.Models
                 new Armour("Pants", 4, "Pants of protection", 15, 1, 1, 10, 10),
 
 
-                new Armour("Gloves", 5, "Glove of swiftness", 20, 1, 1, 10, 10)
+                new Armour("Gloves", 5, "Gloves of swiftness", 20, 1, 1, 10, 10)
             };
         }
 
@@ -238,7 +238,6 @@ namespace text_adventure_game.Models
             Console.Clear();
             player.Health = player.MaxHealthFromItems;
             player.Armour = player.MaxArmour;
-            Console.ReadKey();
 
         }
 
@@ -657,14 +656,15 @@ namespace text_adventure_game.Models
             monster.MonsterDif = 4;
             monster.ChooseMonster();
 
-            Console.Clear();
-            player.PrintStats();
-            Console.WriteLine($"You have entered the {_mapName4}. Now you can finally understand what the keys you have gathered are supposed to do! \nYou see a huge castle with a big door. On the door there are 3 key holes..." +
-                $" \nDo you want to try to slam your way in or use the keys?\n");
-            Console.WriteLine("1. Use the keys");
-            Console.WriteLine("2. Slam the door");
+            
             do
             {
+                Console.Clear();
+                player.PrintStats();
+                Console.WriteLine($"You have entered the {_mapName4}. Now you can finally understand what the keys you have gathered are supposed to do! \nYou see a huge castle with a big door. On the door there are 3 key holes..." +
+                    $" \nDo you want to try to slam your way in or use the keys?\n");
+                Console.WriteLine("1. Use the keys");
+                Console.WriteLine("2. Slam the door");
                 if (int.TryParse(Console.ReadLine(), out userChoice))
                 {
                     switch (userChoice)

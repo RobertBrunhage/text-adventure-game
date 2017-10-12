@@ -8,7 +8,6 @@ namespace text_adventure_game.Models
 {
     class Player
     {
-        //Main things
         public int MaxHealthFromItems { get; set; }
         private int _Health;
         public int Health
@@ -40,7 +39,6 @@ namespace text_adventure_game.Models
         public int Age { get; set; }
         public int Gold { get; set; }
 
-        //Player Stats
         public int Armour { get; set; }
         public int MaxArmour { get; set; }
 
