@@ -167,7 +167,7 @@ namespace text_adventure_game.Models
             Console.ReadKey();
         }
 
-        public void GameStart() //Returning here all the time
+        public void GameStart() //Returning point for code
         {     
             //Main Menu
             int userChoice = 0;
